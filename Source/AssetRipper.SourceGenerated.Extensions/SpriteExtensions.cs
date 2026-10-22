@@ -12,46 +12,35 @@ namespace AssetRipper.SourceGenerated.Extensions;
 public static class SpriteExtensions
 {
 	/// <summary>
-	/// Pure
+	/// Recalculate the sprite coordinates relative to the atlas page that contains it.
 	/// </summary>
-	/// <param name="sprite"></param>
-	/// <param name="atlas"></param>
-	/// <param name="sAtlasRect"></param>
-	/// <param name="sAtlasPivot"></param>
-	/// <param name="sAtlasBorder"></param>
-	public static void GetSpriteCoordinatesInAtlas(this ISprite sprite, ISpriteAtlas? atlas, out RectangleF sAtlasRect, out Vector2 sAtlasPivot, out Vector4 sAtlasBorder)
+	/// <remarks>
+	/// Sprite values are relative to the original image (the image it was created from).
+	/// Since an atlas shuffles and crops sprite images, those values need to be recalculated.
+	/// This only applies when the sprite is actually packed into an atlas. Standalone sprites
+	/// keep their serialized values.
+	/// </remarks>
+	/// <returns><see langword="true"/> if the sprite is packed into the atlas; otherwise, <see langword="false"/>.</returns>
+	public static bool GetSpriteCoordinatesInAtlas(this ISprite sprite, ISpriteAtlas? atlas, out RectangleF sAtlasRect, out Vector2 sAtlasPivot, out Vector4 sAtlasBorder)
 	{
-		// sprite values are relative to original image (image, it was created from).
-		// since atlas shuffle and crop sprite images, we need to recalculate those values.
-		// if sprite doesn't belong to an atlas, consider its image as single sprite atlas
+		if (atlas is null
+			|| !sprite.Has_RenderDataKey()
+			|| !atlas.RenderDataMap.TryGetValue(sprite.RenderDataKey, out ISpriteAtlasData? atlasData))
+		{
+			// This sprite is not packed in an atlas, so its serialized values are already correct.
+			sAtlasRect = sprite.Rect.CastToStruct();
+			sAtlasPivot = GetPivot(sprite);
+			sAtlasBorder = sprite.Has_Border() ? sprite.Border.CastToStruct() : default;
+			return false;
+		}
 
-		Vector2 cropBotLeft;
-		if (atlas is not null && sprite.Has_RenderDataKey() && atlas.RenderDataMap.TryGetValue(sprite.RenderDataKey, out ISpriteAtlasData? atlasData))
-		{
-			sAtlasRect = atlasData.TextureRect.CastToStruct();
-			cropBotLeft = (Vector2)atlasData.TextureRectOffset;
-		}
-		else
-		{
-			sAtlasRect = sprite.RD.TextureRect.CastToStruct();
-			cropBotLeft = (Vector2)sprite.RD.TextureRectOffset;
-		}
+		sAtlasRect = atlasData.TextureRect.CastToStruct();
+		Vector2 cropBotLeft = (Vector2)atlasData.TextureRectOffset;
 
 		Vector2 sizeDelta = sprite.Rect.Size() - sAtlasRect.Size();
 		Vector2 cropTopRight = new Vector2(sizeDelta.X - cropBotLeft.X, sizeDelta.Y - cropBotLeft.Y);
 
-		Vector2 pivot;
-		if (sprite.Has_Pivot())
-		{
-			pivot = (Vector2)sprite.Pivot;
-		}
-		else
-		{
-			Vector2 center = new Vector2(sprite.Rect.Size().X / 2.0f, sprite.Rect.Size().Y / 2.0f);
-			Vector2 pivotOffset = center + (Vector2)sprite.Offset;
-			pivot = new Vector2(pivotOffset.X / sprite.Rect.Size().X, pivotOffset.Y / sprite.Rect.Size().Y);
-		}
-
+		Vector2 pivot = GetPivot(sprite);
 		Vector2 pivotPosition = new Vector2(pivot.X * sprite.Rect.Size().X, pivot.Y * sprite.Rect.Size().Y);
 		Vector2 aAtlasPivotPosition = pivotPosition - cropBotLeft;
 		sAtlasPivot = new Vector2(aAtlasPivotPosition.X / sAtlasRect.Size().X, aAtlasPivotPosition.Y / sAtlasRect.Size().Y);
@@ -67,6 +56,22 @@ public static class SpriteExtensions
 		else
 		{
 			sAtlasBorder = default;
+		}
+
+		return true;
+	}
+
+	private static Vector2 GetPivot(ISprite sprite)
+	{
+		if (sprite.Has_Pivot())
+		{
+			return (Vector2)sprite.Pivot;
+		}
+		else
+		{
+			Vector2 center = new Vector2(sprite.Rect.Size().X / 2.0f, sprite.Rect.Size().Y / 2.0f);
+			Vector2 pivotOffset = center + (Vector2)sprite.Offset;
+			return new Vector2(pivotOffset.X / sprite.Rect.Size().X, pivotOffset.Y / sprite.Rect.Size().Y);
 		}
 	}
 
