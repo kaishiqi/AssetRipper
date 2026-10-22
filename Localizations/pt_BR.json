@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Pasta de referência (opcional)",
+    "reference_project_path_hint": "Os assets com o mesmo caminho da pasta de referência reutilizam o GUID do seu .meta. Deixe vazio para gerar novos GUIDs.",
     "an_error_occured_during_decompilation": "Um erro ocorreu durante a descompilação.",
     "assembly_name": "Nome do Assembly",
     "asset_bundle_name": "Nome do Pacote de Asset",

@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "مجلد المرجع (اختياري)",
+    "reference_project_path_hint": "الأصول التي لها نفس المسار في مجلد المرجع تعيد استخدام GUID الخاص بملف .meta. اتركه فارغًا لإنشاء GUIDات جديدة.",
     "all": "الكل",
     "appreciation_message": "شكرًا لك على دعمك لـ AssetRipper!",
     "asset_ripper_free": "AssetRipper المجاني",

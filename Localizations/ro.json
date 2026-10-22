@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Folder de referință (opțional)",
+    "reference_project_path_hint": "Activele cu aceeași cale ca în folderul de referință refolosesc GUID-ul din .meta. Lăsați gol pentru a genera GUID-uri noi.",
     "asset_tab_audio": "Audio",
     "asset_tab_audio_duration_unknown": "<Necunoscut>",
     "lightmap_texture_export_title": "Format de export textură lightmap",

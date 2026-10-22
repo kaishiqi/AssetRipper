@@ -16,11 +16,12 @@ public sealed class SceneDefinition
 	/// <returns></returns>
 	public static SceneDefinition FromName(string name, UnityGuid guid = default)
 	{
+		string path = $"Assets/Scenes/{name}";
 		return new()
 		{
 			Name = name,
-			Path = $"Assets/Scenes/{name}",
-			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
+			Path = path,
+			GUID = guid.IsZero ? UnityGuid.Md5Hash(path) : guid,
 		};
 	}
 
@@ -36,7 +37,7 @@ public sealed class SceneDefinition
 		{
 			Name = System.IO.Path.GetFileName(path),
 			Path = path,
-			GUID = guid.IsZero ? UnityGuid.NewGuid() : guid,
+			GUID = guid.IsZero ? UnityGuid.Md5Hash(path) : guid,
 		};
 	}
 
@@ -53,7 +54,7 @@ public sealed class SceneDefinition
 	/// <summary>
 	/// The GUID of this scene. It gets used in the scene's meta file. This will not be <see cref="UnityGuid.Zero"/>.
 	/// </summary>
-	public required UnityGuid GUID { get; init; }
+	public required UnityGuid GUID { get; set; }
 
 	/// <summary>
 	/// All the <see cref="AssetCollection"/>s that make up this scene.

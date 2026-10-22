@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "参照フォルダー（任意）",
+    "reference_project_path_hint": "参照フォルダーと同じパスのアセットは、そのフォルダーの .meta の GUID を再利用します。空欄の場合は新しい GUID を生成します。",
     "asset_tab_audio": "オーディオ",
     "asset_tab_audio_duration_unknown": "<不明>",
     "asset_tab_audio_pause": "一時停止",

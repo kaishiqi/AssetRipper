@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Referans klasörü (isteğe bağlı)",
+    "reference_project_path_hint": "Referans klasörüyle aynı yola sahip varlıklar, o klasördeki .meta dosyasının GUID'ini yeniden kullanır. Yeni GUID'ler oluşturmak için boş bırakın.",
     "asset_tab_audio": "Ses",
     "asset_tab_audio_duration_unknown": "<Bilinmiyor>",
     "asset_tab_audio_pause": "Duraklat",

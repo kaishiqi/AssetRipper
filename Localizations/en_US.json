@@ -78,6 +78,8 @@
     "configuration_files_singletons": "Singletons",
     "count": "Count",
     "create_subfolder": "Create Subfolder",
+    "reference_project_path": "Reference Folder (optional)",
+    "reference_project_path_hint": "Assets with the same path as in the reference folder reuse that folder's .meta GUID. Leave empty to generate new GUIDs.",
     "csharp_type": "C# Type",
     "data": "Data",
     "default_version": "Default Version",

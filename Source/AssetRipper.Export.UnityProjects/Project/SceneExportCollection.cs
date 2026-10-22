@@ -33,6 +33,21 @@ public class SceneExportCollection : ExportCollection, IComparer<IUnityObjectBas
 		componentArray = hierarchy.ExportableAssets.Order(this).ToArray();
 	}
 
+	internal override void PrepareExport(string projectRootPath, FileSystem fileSystem, ReferenceGuidSource? reference, ISet<string> plannedPaths)
+	{
+		if (reference is null)
+		{
+			return;
+		}
+
+		string relativePath = $"{Scene.Path}.{ExportExtension}";
+		plannedPaths.Add(fileSystem.Path.Join(projectRootPath, relativePath));
+		if (reference.TryGetGuid(relativePath, out UnityGuid guid))
+		{
+			Scene.GUID = guid;
+		}
+	}
+
 	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
 		string filePath = fileSystem.Path.Join(projectDirectory, $"{Scene.Path}.{ExportExtension}");

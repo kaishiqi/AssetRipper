@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "參考資料夾（選填）",
+    "reference_project_path_hint": "與參考資料夾中路徑相同的資源會沿用該目錄 .meta 中的 GUID；留空則全部重新產生。",
     "asset_tab_audio": "音訊",
     "asset_tab_audio_duration_unknown": "<長度不明>",
     "asset_tab_audio_pause": "暫停",

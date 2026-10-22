@@ -60,6 +60,12 @@ public sealed record class ExportSettings
 
 	public string? LanguageCode { get; set; }
 
+	/// <summary>
+	/// The path to a previous export. When set, exported assets whose relative path matches an asset
+	/// in this export reuse the guid from its .meta file. When empty, all guids are newly generated.
+	/// </summary>
+	public string ReferenceProjectPath { get; set; } = "";
+
 	public void Log()
 	{
 		Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
@@ -72,5 +78,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(TextExportMode)}: {TextExportMode}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportUnreadableAssets)}: {ExportUnreadableAssets}");
 		Logger.Info(LogCategory.General, $"{nameof(PreferOriginalTextureExtension)}: {PreferOriginalTextureExtension}");
+		Logger.Info(LogCategory.General, $"{nameof(ReferenceProjectPath)}: {ReferenceProjectPath}");
 	}
 }

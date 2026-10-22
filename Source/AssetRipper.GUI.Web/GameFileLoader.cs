@@ -56,10 +56,13 @@ public static class GameFileLoader
 		GameData = ExportHandler.LoadAndProcess(paths, LocalFileSystem.Instance);
 	}
 
-	public static async Task ExportUnityProject(string path)
+	public static async Task ExportUnityProject(string path, string? referenceProjectPath = null)
 	{
 		if (IsLoaded && IsValidExportDirectory(path))
 		{
+			Settings.ExportSettings.ReferenceProjectPath = NormalizeReferenceProjectPath(path, referenceProjectPath);
+			Settings.MaybeSaveToDefaultPath();
+
 			if (IsNonEmptyDirectory(path))
 			{
 				if (!await UserConsentsToDeletion())
@@ -103,6 +106,26 @@ public static class GameFileLoader
 		FullConfiguration settings = new();
 		settings.LoadFromDefaultPath();
 		return settings;
+	}
+
+	private static string NormalizeReferenceProjectPath(string exportPath, string? referenceProjectPath)
+	{
+		if (string.IsNullOrWhiteSpace(referenceProjectPath))
+		{
+			return string.Empty;
+		}
+
+		string referencePath = Path.GetFullPath(referenceProjectPath.Trim());
+		string fullExportPath = Path.GetFullPath(exportPath);
+		StringComparison comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+		if (referencePath.Equals(fullExportPath, comparison)
+			|| referencePath.StartsWith(fullExportPath + Path.DirectorySeparatorChar, comparison))
+		{
+			Logger.Error(LogCategory.Export, $"The reference path '{referencePath}' is inside the export directory and would be deleted. Ignoring it.");
+			return string.Empty;
+		}
+
+		return referencePath;
 	}
 
 	private static bool IsValidExportDirectory(string path)

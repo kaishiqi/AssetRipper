@@ -243,6 +243,8 @@
     "override_path": "重载路径",
     "premium_feature_notice": "高级功能",
     "create_subfolder": "创建子文件夹",
+    "reference_project_path": "参考文件夹（可选）",
+    "reference_project_path_hint": "与参考文件夹中路径相同的资源会沿用该目录 .meta 中的 GUID；留空则全部重新生成。",
     "select_folders": "选择多个文件夹",
     "publicize_assemblies": "公开化程序集的私有成员",
     "scripts_use_fully_qualified_type_names": "在脚本中使用完整的（fully-qualified）类型名",

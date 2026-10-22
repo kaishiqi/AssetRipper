@@ -1,1 +1,4 @@
-{}
+{
+    "reference_project_path": "Folder Referensi (opsional)",
+    "reference_project_path_hint": "Aset dengan jalur yang sama seperti di folder referensi akan menggunakan kembali GUID dari .meta-nya. Biarkan kosong untuk membuat GUID baru."
+}

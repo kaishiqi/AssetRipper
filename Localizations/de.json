@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Referenzordner (optional)",
+    "reference_project_path_hint": "Assets mit demselben Pfad wie im Referenzordner übernehmen dessen .meta-GUID. Leer lassen, um neue GUIDs zu erzeugen.",
     "asset_tab_audio": "Audio",
     "asset_tab_audio_duration_unknown": "<Unbekannt>",
     "asset_tab_audio_pause": "Pausieren",

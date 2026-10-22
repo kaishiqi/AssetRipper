@@ -1,4 +1,6 @@
 {
+  "reference_project_path": "Thư mục tham chiếu (tùy chọn)",
+  "reference_project_path_hint": "Các asset có cùng đường dẫn như trong thư mục tham chiếu sẽ dùng lại GUID từ tệp .meta của nó. Để trống để tạo GUID mới.",
   "all": "Tât",
   "an_error_occured_during_decompilation": "Không thể hoàn tất quá trình dịch ngược mã do xảy ra lỗi.",
   "appreciation_message": "Cảm ơn bạn đã ủng hộ AssetRipper!",

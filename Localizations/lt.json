@@ -1,4 +1,6 @@
 {
+  "reference_project_path": "Nuorodos aplankas (neprivaloma)",
+  "reference_project_path_hint": "Ištekliai, kurių kelias sutampa su nuorodos aplanku, naudoja to aplanko .meta GUID. Palikite tuščią, kad būtų sukurti nauji GUID.",
   "all": "Visi",
   "an_error_occured_during_decompilation": "Dekompiliavimo metu įvyko klaida.",
   "appreciation_message": "Ačiū, kad palaikote AssetRipper!",

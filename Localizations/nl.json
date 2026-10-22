@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Referentiemap (optioneel)",
+    "reference_project_path_hint": "Assets met hetzelfde pad als in de referentiemap hergebruiken de GUID uit de bijbehorende .meta. Laat leeg om nieuwe GUID's te genereren.",
     "bundled_assets_export_group_by_asset_type": "Groeperen op Asset Type",
     "bundled_assets_export_group_by_asset_type_description": "Bundled assets worden op dezelfde manier behandeld als assets uit andere bestanden.",
     "c_sharp_langage_version_config_7_2": "C# 7.2",

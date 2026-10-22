@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Φάκελος αναφοράς (προαιρετικό)",
+    "reference_project_path_hint": "Τα assets με την ίδια διαδρομή όπως στον φάκελο αναφοράς επαναχρησιμοποιούν το GUID από το .meta τους. Αφήστε κενό για να δημιουργηθούν νέα GUID.",
     "asset_tab_audio_play": "Αναπαραγωγή",
     "asset_tab_audio_pause": "Παύση",
     "asset_tab_information": "Πληροφορίες",

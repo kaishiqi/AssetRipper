@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Cartella di riferimento (facoltativa)",
+    "reference_project_path_hint": "Gli asset con lo stesso percorso della cartella di riferimento riutilizzano il GUID del relativo .meta. Lascia vuoto per generare nuovi GUID.",
     "audio_export_title": "Formato di esportazione dei file audio",
     "audio_format_default": "Predefinito",
     "audio_format_default_description": "Esporta gli asset come il tipo di contenuto integrato all'interno dell'FSB. La maggior parte dei file audio viene esportata come file WAV, alcuni invece vengono esportati come file OGG.",
