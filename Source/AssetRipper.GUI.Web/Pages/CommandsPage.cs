@@ -111,7 +111,10 @@ public sealed class CommandsPage : VuePage
 	{
 		base.WriteScriptReferences(writer);
 		string initialReferencePath = System.Text.Json.JsonEncodedText.Encode(GameFileLoader.Settings.ExportSettings.ReferenceProjectPath).ToString();
-		new Script(writer).Close($"window.initialReferenceExportPath = \"{initialReferencePath}\";");
+		using (new Script(writer).End())
+		{
+			writer.Write($"window.initialReferenceExportPath = \"{initialReferencePath}\";");
+		}
 		new Script(writer).WithSrc("/js/commands_page.js").Close();
 	}
 
