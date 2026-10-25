@@ -13,7 +13,7 @@ public abstract class YamlExporterBase : IAssetExporter
 		using Stream fileStream = fileSystem.File.Create(path);
 		using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
 		YamlWriter writer = new();
-		ProjectYamlWalker walker = new(container);
+		ProjectYamlWalker walker = new(container) { DocumentPath = path };
 		YamlDocument doc = walker.ExportYamlDocument(asset);
 		writer.AddDocument(doc);
 		writer.Write(streamWriter);
@@ -32,7 +32,7 @@ public abstract class YamlExporterBase : IAssetExporter
 		using InvariantStreamWriter streamWriter = new InvariantStreamWriter(fileStream, UTF8);
 		YamlWriter writer = new();
 		writer.WriteHead(streamWriter);
-		ProjectYamlWalker walker = new(container);
+		ProjectYamlWalker walker = new(container) { DocumentPath = path };
 		foreach (IUnityObjectBase asset in assets)
 		{
 			YamlDocument doc = walker.ExportYamlDocument(asset);

@@ -31,7 +31,7 @@ public readonly struct Meta
 		return 2;
 	}
 
-	public YamlDocument ExportYamlDocument(IExportContainer container)
+	public YamlDocument ExportYamlDocument(IExportContainer container, string? documentPath = null)
 	{
 		YamlDocument document = new();
 		YamlMappingNode root = document.CreateMappingRoot();
@@ -48,7 +48,7 @@ public readonly struct Meta
 		}
 		//if (Importer.IncludesImporter(container.ExportVersion)) //For now, assume true
 		{
-			root.Add(Importer.ClassName, new ProjectYamlWalker(container) { ExportingAssetImporter = true }.ExportYamlNode(Importer));
+			root.Add(Importer.ClassName, new ProjectYamlWalker(container) { ExportingAssetImporter = true, DocumentPath = documentPath, IsMetaDocument = true }.ExportYamlNode(Importer));
 		}
 		return document;
 	}

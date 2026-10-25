@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.Configuration;
+using AssetRipper.Export.UnityProjects.MissingReferences;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Scripts;
@@ -107,6 +108,7 @@ public class ExportHandler
 		projectExporter.DoFinalOverrides(Settings);
 		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
 		GuidReconciler.Reconcile(Settings, fileSystem);
+		MissingReferencesPostExporter.Write(Settings, fileSystem, projectExporter.MissingReferences);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");
 
@@ -115,6 +117,11 @@ public class ExportHandler
 			postExporter.DoPostExport(gameData, Settings, fileSystem);
 		}
 		Logger.Info(LogCategory.Export, "Finished post-export");
+
+		if (Settings.ExportSettings.FailOnMissingReferences && projectExporter.MissingReferences.Count > 0)
+		{
+			throw new InvalidOperationException($"Export completed with {projectExporter.MissingReferences.Count} missing references. See '{MissingReferencesPostExporter.FileName}'.");
+		}
 
 		static string GetListOfVersions(GameBundle gameBundle)
 		{

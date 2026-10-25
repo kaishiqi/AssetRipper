@@ -42,7 +42,7 @@ public abstract class ExportCollection : IExportCollection
 		writer.IsWriteDefaultTag = false;
 		writer.IsWriteVersion = false;
 		writer.IsFormatKeys = true;
-		YamlDocument doc = meta.ExportYamlDocument(container);
+		YamlDocument doc = meta.ExportYamlDocument(container, metaPath);
 		writer.AddDocument(doc);
 		writer.Write(streamWriter);
 	}

@@ -66,6 +66,11 @@ public sealed record class ExportSettings
 	/// </summary>
 	public string ReferenceProjectPath { get; set; } = "";
 
+	/// <summary>
+	/// If true, the export fails after writing the missing reference report when any reference could not be resolved.
+	/// </summary>
+	public bool FailOnMissingReferences { get; set; } = false;
+
 	public void Log()
 	{
 		Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
@@ -79,5 +84,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(ExportUnreadableAssets)}: {ExportUnreadableAssets}");
 		Logger.Info(LogCategory.General, $"{nameof(PreferOriginalTextureExtension)}: {PreferOriginalTextureExtension}");
 		Logger.Info(LogCategory.General, $"{nameof(ReferenceProjectPath)}: {ReferenceProjectPath}");
+		Logger.Info(LogCategory.General, $"{nameof(FailOnMissingReferences)}: {FailOnMissingReferences}");
 	}
 }
