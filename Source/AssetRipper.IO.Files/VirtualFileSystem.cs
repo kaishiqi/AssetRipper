@@ -11,8 +11,8 @@ public partial class VirtualFileSystem : FileSystem
 
 	private sealed class DirectoryEntry
 	{
-		public string Name { get; }
-		public DirectoryEntry? Parent { get; }
+		public string Name { get; set; }
+		public DirectoryEntry? Parent { get; set; }
 		public Dictionary<string, DirectoryEntry> Children { get; } = [];
 		public Dictionary<string, FileEntry> Files { get; } = [];
 
@@ -293,6 +293,40 @@ public partial class VirtualFileSystem : FileSystem
 
 	public partial class VirtualDirectoryImplementation
 	{
+		public override void Move(string sourceDirName, string destDirName)
+		{
+			string[] sourceParts = Path.GetPathParts(sourceDirName);
+			string[] destParts = Path.GetPathParts(destDirName);
+			if (sourceParts.Length == 0 || destParts.Length == 0)
+			{
+				throw new ArgumentException("Directory paths cannot be empty.");
+			}
+
+			DirectoryEntry sourceParent = Parent.OpenDirectory(sourceParts.AsSpan(0, sourceParts.Length - 1));
+			string sourceName = sourceParts[^1];
+			if (!sourceParent.Children.TryGetValue(sourceName, out DirectoryEntry? source))
+			{
+				throw new DirectoryNotFoundException($"Directory '{sourceDirName}' was not found.");
+			}
+
+			DirectoryEntry destParent = Parent.root;
+			for (int i = 0; i < destParts.Length - 1; i++)
+			{
+				destParent = destParent.CreateDirectory(destParts[i]);
+			}
+
+			string destName = destParts[^1];
+			if (destParent.Children.TryGetValue(destName, out DirectoryEntry? existing) && !ReferenceEquals(existing, source))
+			{
+				throw new IOException($"Directory '{destDirName}' already exists.");
+			}
+
+			sourceParent.Children.Remove(sourceName);
+			source.Name = destName;
+			source.Parent = destParent;
+			destParent.Children[destName] = source;
+		}
+
 		public override void Create(string? path)
 		{
 			string[] parts = Path.GetPathParts(path);

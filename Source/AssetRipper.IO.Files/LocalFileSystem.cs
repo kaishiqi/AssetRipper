@@ -15,6 +15,19 @@ public partial class LocalFileSystem : FileSystem
 		public override void Create(string path) => System.IO.Directory.CreateDirectory(path);
 
 		public override void Delete(string path) => System.IO.Directory.Delete(path, true);
+
+		public override void Move(string sourceDirName, string destDirName)
+		{
+			if (string.Equals(sourceDirName, destDirName, StringComparison.Ordinal))
+			{
+				return;
+			}
+
+			// A case-only rename fails on case-insensitive file systems, so go through a temporary name.
+			string temporaryPath = destDirName + "." + Guid.NewGuid().ToString("N") + ".tmp";
+			System.IO.Directory.Move(sourceDirName, temporaryPath);
+			System.IO.Directory.Move(temporaryPath, destDirName);
+		}
 	}
 
 	public static string ExecutingDirectory => AppContext.BaseDirectory;

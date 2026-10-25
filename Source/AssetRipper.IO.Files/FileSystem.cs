@@ -36,6 +36,8 @@ public partial class FileSystem
 
 		public virtual void Delete(string path) => throw new NotSupportedException();
 
+		public virtual void Move(string sourceDirName, string destDirName) => throw new NotSupportedException();
+
 		public string CreateTemporary()
 		{
 			string path = Path.Join(Parent.TemporaryDirectory, GetRandomString()[0..8]);

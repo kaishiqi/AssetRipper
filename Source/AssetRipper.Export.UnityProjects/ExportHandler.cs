@@ -114,6 +114,7 @@ public class ExportHandler
 		BeforeExport(projectExporter);
 		projectExporter.DoFinalOverrides(Settings);
 		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
+		PathCasingRestorer.Restore(Settings, fileSystem);
 		GuidReconciler.Reconcile(Settings, fileSystem);
 		MissingReferencesPostExporter.Write(Settings, fileSystem, projectExporter.MissingReferences);
 
