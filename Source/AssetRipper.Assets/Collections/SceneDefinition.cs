@@ -54,7 +54,7 @@ public sealed class SceneDefinition
 	/// <summary>
 	/// The GUID of this scene. It gets used in the scene's meta file. This will not be <see cref="UnityGuid.Zero"/>.
 	/// </summary>
-	public required UnityGuid GUID { get; set; }
+	public required UnityGuid GUID { get; init; }
 
 	/// <summary>
 	/// All the <see cref="AssetCollection"/>s that make up this scene.

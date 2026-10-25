@@ -47,18 +47,6 @@ public abstract class ExportCollection : IExportCollection
 		writer.Write(streamWriter);
 	}
 
-	/// <summary>
-	/// Prepare the collection for export. This is called before any assets are written,
-	/// so that guids can be resolved before they are used in references.
-	/// </summary>
-	/// <param name="projectRootPath">The Unity project root directory.</param>
-	/// <param name="fileSystem">The file system used for the export.</param>
-	/// <param name="reference">The guids of a previous export, if any.</param>
-	/// <param name="plannedPaths">The asset paths that have already been claimed during this export.</param>
-	internal virtual void PrepareExport(string projectRootPath, FileSystem fileSystem, ReferenceGuidSource? reference, ISet<string> plannedPaths)
-	{
-	}
-
 	public abstract bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem);
 	public abstract bool Contains(IUnityObjectBase asset);
 	public abstract long GetExportID(IExportContainer container, IUnityObjectBase asset);

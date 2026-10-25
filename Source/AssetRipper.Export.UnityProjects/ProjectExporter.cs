@@ -1,6 +1,5 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
-using AssetRipper.Export.Configuration;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.SourceGenerated;
@@ -16,7 +15,6 @@ public sealed partial class ProjectExporter
 	public event Action? EventExportFinished;
 
 	private readonly ObjectHandlerStack<IAssetExporter> assetExporterStack = new();
-	private readonly FullConfiguration settings;
 
 	/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
 	/// <typeparam name="T">The c sharp type of this asset type. Any inherited types also get this exporter.</typeparam>
@@ -80,9 +78,6 @@ public sealed partial class ProjectExporter
 		List<IExportCollection> collections = CreateCollections(fileCollection);
 		EventExportPreparationFinished?.Invoke();
 
-		// Resolve guids before any assets are written, because references read them during export.
-		ResolveGuids(collections, options.ProjectRootPath, fileSystem);
-
 		EventExportStarted?.Invoke();
 		ProjectAssetContainer container = new ProjectAssetContainer(this, options, fileCollection.FetchAssets(), collections);
 		int exportableCount = collections.Count(c => c.Exportable);
@@ -105,19 +100,6 @@ public sealed partial class ProjectExporter
 			EventExportProgressUpdated?.Invoke(i, collections.Count);
 		}
 		EventExportFinished?.Invoke();
-	}
-
-	private void ResolveGuids(List<IExportCollection> collections, string projectRootPath, FileSystem fileSystem)
-	{
-		ReferenceGuidSource? reference = ReferenceGuidSource.Create(settings.ExportSettings.ReferenceProjectPath, fileSystem);
-		HashSet<string> plannedPaths = new(StringComparer.Ordinal);
-		foreach (IExportCollection collection in collections)
-		{
-			if (collection is ExportCollection exportCollection)
-			{
-				exportCollection.PrepareExport(projectRootPath, fileSystem, reference, plannedPaths);
-			}
-		}
 	}
 
 	private List<IExportCollection> CreateCollections(GameBundle fileCollection)

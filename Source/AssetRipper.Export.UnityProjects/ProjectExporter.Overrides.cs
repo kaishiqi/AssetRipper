@@ -60,8 +60,6 @@ partial class ProjectExporter
 {
 	public ProjectExporter(FullConfiguration settings, IAssemblyManager assemblyManager)
 	{
-		this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
 		OverrideExporter<IUnityObjectBase>(new DefaultYamlExporter(), true);
 
 		ManagerAssetExporter managerExporter = new();

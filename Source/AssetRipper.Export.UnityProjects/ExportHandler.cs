@@ -106,6 +106,7 @@ public class ExportHandler
 		BeforeExport(projectExporter);
 		projectExporter.DoFinalOverrides(Settings);
 		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
+		GuidReconciler.Reconcile(Settings, fileSystem);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");
 
