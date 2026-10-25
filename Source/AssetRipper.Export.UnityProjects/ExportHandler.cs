@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.Configuration;
+using AssetRipper.Export.UnityProjects.Addressables;
 using AssetRipper.Export.UnityProjects.Audio;
 using AssetRipper.Export.UnityProjects.MissingReferences;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
@@ -144,6 +145,7 @@ public class ExportHandler
 		yield return new ProjectVersionPostExporter();
 		yield return new PackageManifestPostExporter();
 		yield return new StreamingAssetsPostExporter();
+		yield return new AddressablesPostExporter();
 		yield return new DllPostExporter();
 		yield return new PathIdMapExporter();
 		yield return new GuidMapPostExporter();
