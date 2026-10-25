@@ -46,6 +46,10 @@ public static class PathCasingRestorer
 		{
 			Logger.Info(LogCategory.Export, $"Restored the capitalization of {renamedCount} directories from the reference project.");
 		}
+		else
+		{
+			Logger.Info(LogCategory.Export, "Directory capitalization already matches the reference project.");
+		}
 	}
 
 	private static Dictionary<string, string> CreateCanonicalDirectoryMap(string referenceRootPath, FileSystem fileSystem)
