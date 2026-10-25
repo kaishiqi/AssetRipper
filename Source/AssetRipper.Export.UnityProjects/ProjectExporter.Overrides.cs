@@ -116,6 +116,10 @@ partial class ProjectExporter
 			OverrideExporter<ISprite>(spriteExporter);
 			OverrideExporter<ISpriteAtlas>(spriteExporter);
 		}
+		if (settings.ExportSettings.PreserveSpriteAtlases)
+		{
+			OverrideExporter<ISpriteAtlas>(new SpriteAtlasExporter());
+		}
 		if (settings.ExportSettings.LightmapTextureExportFormat is not LightmapTextureExportFormat.Yaml)
 		{
 			OverrideExporter<ITexture2D>(new LightmapTextureAssetExporter(settings.ExportSettings.LightmapTextureExportFormat is LightmapTextureExportFormat.Exr

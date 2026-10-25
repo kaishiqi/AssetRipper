@@ -64,7 +64,7 @@ public sealed record class ExportSettings
 	/// The path to a previous export. When set, exported assets whose relative path matches an asset
 	/// in this export reuse the guid from its .meta file. When empty, all guids are newly generated.
 	/// </summary>
-	public string ReferenceProjectPath { get; set; } = "";
+	public string? ReferenceProjectPath { get; set; }
 
 	/// <summary>
 	/// If true, the export fails after writing the missing reference report when any reference could not be resolved.
@@ -76,6 +76,12 @@ public sealed record class ExportSettings
 	/// placeholder PNG so that references to them remain valid.
 	/// </summary>
 	public bool ExportTexturePlaceholders { get; set; } = true;
+
+	/// <summary>
+	/// If true, SpriteAtlas assets are exported with a SpriteAtlasImporter instead of being unpacked
+	/// into individual sprites. Unity re-packs the atlas on import.
+	/// </summary>
+	public bool PreserveSpriteAtlases { get; set; } = false;
 
 	public void Log()
 	{
@@ -92,5 +98,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(ReferenceProjectPath)}: {ReferenceProjectPath}");
 		Logger.Info(LogCategory.General, $"{nameof(FailOnMissingReferences)}: {FailOnMissingReferences}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportTexturePlaceholders)}: {ExportTexturePlaceholders}");
+		Logger.Info(LogCategory.General, $"{nameof(PreserveSpriteAtlases)}: {PreserveSpriteAtlases}");
 	}
 }

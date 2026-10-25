@@ -182,6 +182,22 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
+									WriteCheckBoxForExportTexturePlaceholders(writer, Localization.ExportTexturePlaceholders);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForPreserveSpriteAtlases(writer, Localization.PreserveSpriteAtlases);
+								}
+								using (new Div(writer).WithClass("col").End())
+								{
+									WriteCheckBoxForFailOnMissingReferences(writer, Localization.FailOnMissingReferences);
+								}
+							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
 								}
 								using (new Div(writer).WithClass("col").End())
 								{

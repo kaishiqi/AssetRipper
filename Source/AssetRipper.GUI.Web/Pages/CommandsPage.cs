@@ -110,7 +110,7 @@ public sealed class CommandsPage : VuePage
 	protected override void WriteScriptReferences(TextWriter writer)
 	{
 		base.WriteScriptReferences(writer);
-		string initialReferencePath = System.Text.Json.JsonEncodedText.Encode(GameFileLoader.Settings.ExportSettings.ReferenceProjectPath).ToString();
+		string initialReferencePath = System.Text.Json.JsonEncodedText.Encode(GameFileLoader.Settings.ExportSettings.ReferenceProjectPath ?? string.Empty).ToString();
 		using (new Script(writer).End())
 		{
 			writer.Write($"window.initialReferenceExportPath = \"{initialReferencePath}\";");

@@ -17,6 +17,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_319;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_62;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_84;
@@ -97,6 +98,7 @@ public abstract class ExportCollection : IExportCollection
 		return asset switch
 		{
 			IShader => "shader",
+			ISpriteAtlas => "spriteatlas",
 			IMaterial => "mat",
 			IAnimationClip => "anim",
 			IAnimatorController => "controller",

@@ -57,6 +57,9 @@ partial class SettingsPage
 			case nameof(ExportSettings.LanguageCode):
 				Configuration.ExportSettings.LanguageCode = value;
 				break;
+			case nameof(ExportSettings.ReferenceProjectPath):
+				Configuration.ExportSettings.ReferenceProjectPath = value;
+				break;
 		}
 	}
 
@@ -72,6 +75,9 @@ partial class SettingsPage
 		{ nameof(ExportSettings.ExportUnreadableAssets), (value) => { Configuration.ExportSettings.ExportUnreadableAssets = value; } },
 		{ nameof(ExportSettings.PreferOriginalTextureExtension), (value) => { Configuration.ExportSettings.PreferOriginalTextureExtension = value; } },
 		{ nameof(ExportSettings.SaveSettingsToDisk), (value) => { Configuration.ExportSettings.SaveSettingsToDisk = value; } },
+		{ nameof(ExportSettings.FailOnMissingReferences), (value) => { Configuration.ExportSettings.FailOnMissingReferences = value; } },
+		{ nameof(ExportSettings.ExportTexturePlaceholders), (value) => { Configuration.ExportSettings.ExportTexturePlaceholders = value; } },
+		{ nameof(ExportSettings.PreserveSpriteAtlases), (value) => { Configuration.ExportSettings.PreserveSpriteAtlases = value; } },
 	};
 
 	private static void WriteDropDownForScriptContentLevel(TextWriter writer)
@@ -177,5 +183,20 @@ partial class SettingsPage
 	private static void WriteCheckBoxForSaveSettingsToDisk(TextWriter writer, string label, bool disabled = false)
 	{
 		WriteCheckBox(writer, label, Configuration.ExportSettings.SaveSettingsToDisk, nameof(ExportSettings.SaveSettingsToDisk), disabled);
+	}
+
+	private static void WriteCheckBoxForFailOnMissingReferences(TextWriter writer, string label, bool disabled = false)
+	{
+		WriteCheckBox(writer, label, Configuration.ExportSettings.FailOnMissingReferences, nameof(ExportSettings.FailOnMissingReferences), disabled);
+	}
+
+	private static void WriteCheckBoxForExportTexturePlaceholders(TextWriter writer, string label, bool disabled = false)
+	{
+		WriteCheckBox(writer, label, Configuration.ExportSettings.ExportTexturePlaceholders, nameof(ExportSettings.ExportTexturePlaceholders), disabled);
+	}
+
+	private static void WriteCheckBoxForPreserveSpriteAtlases(TextWriter writer, string label, bool disabled = false)
+	{
+		WriteCheckBox(writer, label, Configuration.ExportSettings.PreserveSpriteAtlases, nameof(ExportSettings.PreserveSpriteAtlases), disabled);
 	}
 }
