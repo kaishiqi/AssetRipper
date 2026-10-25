@@ -20,6 +20,7 @@ public static class ImporterFactory
 	public static ITextureImporter GenerateTextureImporter(IExportContainer container, IUnityObjectBase origin)
 	{
 		TextureImporterData data = new TextureImporterData(origin);
+		bool isPlaceholder = origin is ITexture2D texture && TextureAssetExporter.IsPlaceholder(texture);
 		ITextureImporter instance = TextureImporter.Create(container.File, container.ExportVersion);
 		instance.MipMaps.EnableMipMap = data.EnableMipMap ? 1 : 0;
 		instance.MipMaps.SRGBTexture = data.SRGBTexture ? 1 : 0;
@@ -34,8 +35,8 @@ public static class ImporterFactory
 				: TextureImporterGenerateCubemap.None;
 		instance.StreamingMipmaps = data.StreamingMipmaps ? 1 : 0;
 		instance.StreamingMipmapsPriority = data.StreamingMipmapsPriority;
-		instance.IsReadable = data.IsReadable ? 1 : 0;
-		instance.Format = (int)data.Format;
+		instance.IsReadable = isPlaceholder || data.IsReadable ? 1 : 0;
+		instance.Format = (int)(isPlaceholder ? TextureFormat.Alpha8 : data.Format);
 		instance.MaxTextureSize = data.MaxTextureSize;
 		instance.TextureSettings.CopyValues(data.TextureSettings);
 		// cubemaps break when they aren't scaled, while sprites break if they ARE scaled
@@ -66,7 +67,7 @@ public static class ImporterFactory
 		platformSettings.MaxTextureSize = instance.MaxTextureSize;
 		platformSettings.ResizeAlgorithm = (int)TextureResizeAlgorithm.Mitchell;
 		platformSettings.Format = (int)TextureImporterFormat.Automatic;
-		platformSettings.TextureCompression = (int)TextureImporterCompression.CompressedHQ;//Uncompressed results in a significantly larger Library folder
+		platformSettings.TextureCompression = (int)(isPlaceholder ? TextureImporterCompression.Uncompressed : TextureImporterCompression.CompressedHQ);//Uncompressed results in a significantly larger Library folder
 		platformSettings.CompressionQuality = 50;
 		platformSettings.CrunchedCompression = false;
 		platformSettings.AllowsAlphaSplitting = false;

@@ -57,6 +57,10 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 	{
 		if (m_convert)
 		{
+			if (AssetExporter.ExportTexturePlaceholders && asset is ITexture2D texture && TextureAssetExporter.IsPlaceholder(texture))
+			{
+				return AssetExporter.ImageExportFormat.GetFileExtension();
+			}
 			return asset.GetTextureExtension(AssetExporter.PreferOriginalTextureExtension, AssetExporter.ImageExportFormat);
 		}
 		return base.GetExportExtension(asset);

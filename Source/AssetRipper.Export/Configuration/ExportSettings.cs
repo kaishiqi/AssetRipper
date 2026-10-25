@@ -71,6 +71,12 @@ public sealed record class ExportSettings
 	/// </summary>
 	public bool FailOnMissingReferences { get; set; } = false;
 
+	/// <summary>
+	/// If true, textures without image data (for example TMP dynamic font atlases) are exported as a
+	/// placeholder PNG so that references to them remain valid.
+	/// </summary>
+	public bool ExportTexturePlaceholders { get; set; } = true;
+
 	public void Log()
 	{
 		Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
@@ -85,5 +91,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(PreferOriginalTextureExtension)}: {PreferOriginalTextureExtension}");
 		Logger.Info(LogCategory.General, $"{nameof(ReferenceProjectPath)}: {ReferenceProjectPath}");
 		Logger.Info(LogCategory.General, $"{nameof(FailOnMissingReferences)}: {FailOnMissingReferences}");
+		Logger.Info(LogCategory.General, $"{nameof(ExportTexturePlaceholders)}: {ExportTexturePlaceholders}");
 	}
 }
