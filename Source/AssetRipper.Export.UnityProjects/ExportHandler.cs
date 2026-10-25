@@ -24,6 +24,8 @@ namespace AssetRipper.Export.UnityProjects;
 public class ExportHandler
 {
 	protected FullConfiguration Settings { get; }
+	private IReadOnlyList<string> inputPaths = [];
+	private FileSystem? inputFileSystem;
 
 	public ExportHandler(FullConfiguration settings)
 	{
@@ -32,6 +34,9 @@ public class ExportHandler
 
 	public GameData Load(IReadOnlyList<string> paths, FileSystem fileSystem)
 	{
+		inputPaths = paths;
+		inputFileSystem = fileSystem;
+
 		if (paths.Count == 1)
 		{
 			Logger.Info(LogCategory.Import, $"Attempting to read files from {paths[0]}");
@@ -145,7 +150,7 @@ public class ExportHandler
 		yield return new ProjectVersionPostExporter();
 		yield return new PackageManifestPostExporter();
 		yield return new StreamingAssetsPostExporter();
-		yield return new AddressablesPostExporter();
+		yield return new AddressablesPostExporter(inputPaths, inputFileSystem);
 		yield return new DllPostExporter();
 		yield return new PathIdMapExporter();
 		yield return new GuidMapPostExporter();

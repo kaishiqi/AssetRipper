@@ -2,6 +2,7 @@ using AssetRipper.Assets.Bundles;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects;
+using AssetRipper.Export.UnityProjects.Addressables;
 using AssetRipper.Import.Structure.Assembly.Managers;
 using AssetRipper.Import.Structure.Platforms;
 using AssetRipper.IO.Files;
@@ -41,6 +42,31 @@ internal class AddressablesPostExporterTests
 			Assert.That(outputFileSystem.File.Exists("/output/ExportedProject/Assets/StreamingAssets/aa/Android/catalog.bundle"), Is.False);
 			Assert.That(outputFileSystem.File.ReadAllText(ReportPath), Does.Contain("\"HasCatalog\": true"));
 			Assert.That(outputFileSystem.File.ReadAllText(ReportPath), Does.Contain("\"HasSettings\": true"));
+		}
+	}
+
+	[Test]
+	public void InputDirectoryIsScannedWithoutPlatformStructure()
+	{
+		VirtualFileSystem inputFileSystem = new();
+		inputFileSystem.Directory.Create("/game/assets/aa");
+		inputFileSystem.File.WriteAllText("/game/assets/aa/catalog.json", "{}");
+		inputFileSystem.File.WriteAllText("/game/assets/aa/settings.json", "{}");
+
+		VirtualFileSystem outputFileSystem = new();
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+		collection.CreateMesh();
+		GameData gameData = new((GameBundle)collection.Bundle, collection.Version, new BaseManager(_ => { }), null);
+		FullConfiguration settings = new();
+		settings.ExportRootPath = "/output";
+
+		new AddressablesPostExporter(["/game"], inputFileSystem).DoPostExport(gameData, settings, outputFileSystem);
+
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(outputFileSystem.File.Exists(CatalogPath), Is.True);
+			Assert.That(outputFileSystem.File.Exists(SettingsPath), Is.True);
+			Assert.That(outputFileSystem.File.ReadAllText(ReportPath), Does.Contain("\"HasCatalog\": true"));
 		}
 	}
 

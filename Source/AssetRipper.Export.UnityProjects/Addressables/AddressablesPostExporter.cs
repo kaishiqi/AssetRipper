@@ -17,20 +17,34 @@ public sealed class AddressablesPostExporter : IPostExporter
 {
 	public const string FileName = "addressables-report.json";
 
+	private readonly IReadOnlyList<string> inputPaths;
+	private readonly FileSystem? inputFileSystem;
+
+	public AddressablesPostExporter() : this([], null)
+	{
+	}
+
+	/// <param name="inputPaths">The paths that were loaded. Used when a mixed/raw directory input has no platform structure.</param>
+	/// <param name="inputFileSystem">The file system used for the loaded input paths.</param>
+	public AddressablesPostExporter(IReadOnlyList<string>? inputPaths, FileSystem? inputFileSystem)
+	{
+		this.inputPaths = inputPaths ?? [];
+		this.inputFileSystem = inputFileSystem;
+	}
+
 	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
-		PlatformGameStructure? platform = gameData.PlatformStructure;
-		string? sourceDirectory = platform is null ? null : FindSourceDirectory(platform);
+		SourceLocation? source = FindSourceLocation(gameData.PlatformStructure);
 		List<string> copiedFiles = new();
 
-		if (sourceDirectory is not null)
+		if (source is not null)
 		{
 			string destinationRoot = fileSystem.Path.Join(settings.AssetsPath, "StreamingAssets", "aa");
 			fileSystem.Directory.Create(destinationRoot);
 
-			foreach (string sourceFile in platform!.FileSystem.Directory.EnumerateFiles(sourceDirectory, "*.json", SearchOption.AllDirectories))
+			foreach (string sourceFile in source.FileSystem.Directory.EnumerateFiles(source.Directory, "*.json", SearchOption.AllDirectories))
 			{
-				string relativePath = platform.FileSystem.Path.GetRelativePath(sourceDirectory, sourceFile);
+				string relativePath = source.FileSystem.Path.GetRelativePath(source.Directory, sourceFile);
 				string destinationPath = fileSystem.Path.Join(destinationRoot, relativePath);
 				string? destinationDirectory = fileSystem.Path.GetDirectoryName(destinationPath);
 				if (!string.IsNullOrEmpty(destinationDirectory))
@@ -38,7 +52,7 @@ public sealed class AddressablesPostExporter : IPostExporter
 					fileSystem.Directory.Create(destinationDirectory);
 				}
 
-				using (Stream readStream = platform.FileSystem.File.OpenRead(sourceFile))
+				using (Stream readStream = source.FileSystem.File.OpenRead(sourceFile))
 				using (Stream writeStream = fileSystem.File.Create(destinationPath))
 				{
 					readStream.CopyTo(writeStream);
@@ -49,12 +63,12 @@ public sealed class AddressablesPostExporter : IPostExporter
 
 		AddressablesReport report = new()
 		{
-			SourceDirectory = sourceDirectory,
+			SourceDirectory = source?.Directory,
 			DestinationDirectory = "Assets/StreamingAssets/aa",
 			CopiedFiles = copiedFiles,
 			HasCatalog = copiedFiles.Any(f => string.Equals(Path.GetFileName(f), "catalog.json", StringComparison.OrdinalIgnoreCase)),
 			HasSettings = copiedFiles.Any(f => string.Equals(Path.GetFileName(f), "settings.json", StringComparison.OrdinalIgnoreCase)),
-			Note = GetNote(platform, sourceDirectory),
+			Note = GetNote(gameData.PlatformStructure, source),
 		};
 
 		string outputDirectory = settings.AuxiliaryFilesPath;
@@ -67,61 +81,100 @@ public sealed class AddressablesPostExporter : IPostExporter
 
 		if (report.HasCatalog)
 		{
-			Logger.Info(LogCategory.Export, $"Copied {copiedFiles.Count} Addressables files from '{sourceDirectory}'.");
+			Logger.Info(LogCategory.Export, $"Copied {copiedFiles.Count} Addressables files from '{source!.Directory}'.");
 		}
-		else if (sourceDirectory is not null)
+		else if (source is not null)
 		{
-			Logger.Warning(LogCategory.Export, $"Found Addressables directory '{sourceDirectory}', but no catalog.json was copied.");
+			Logger.Warning(LogCategory.Export, $"Found Addressables directory '{source.Directory}', but no catalog.json was copied.");
 		}
 	}
 
-	private static string? FindSourceDirectory(PlatformGameStructure platform)
+	private SourceLocation? FindSourceLocation(PlatformGameStructure? platform)
 	{
-		FileSystem fileSystem = platform.FileSystem;
-		List<string?> candidates = new()
+		if (platform is not null)
 		{
-			GetSubdirectory(platform.StreamingAssetsPath, "aa"),
-			GetSubdirectory(platform.RootPath, "assets", "aa"),
-			GetSubdirectory(platform.RootPath, "aa"),
-			GetSubdirectory(platform.GameDataPath, "Raw", "aa"),
-		};
+			SourceLocation? location = FindSourceLocation(platform.FileSystem, GetPlatformCandidates(platform));
+			if (location is not null)
+			{
+				return location;
+			}
+		}
 
+		if (inputFileSystem is not null)
+		{
+			foreach (string inputPath in inputPaths)
+			{
+				if (!inputFileSystem.Directory.Exists(inputPath))
+				{
+					continue;
+				}
+
+				SourceLocation? location = FindSourceLocation(inputFileSystem, GetInputCandidates(inputPath));
+				if (location is not null)
+				{
+					return location;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private static SourceLocation? FindSourceLocation(FileSystem fileSystem, IEnumerable<string?> candidates)
+	{
 		foreach (string? candidate in candidates)
 		{
 			if (candidate is not null && fileSystem.Directory.Exists(candidate))
 			{
-				return candidate;
+				return new SourceLocation(fileSystem, candidate);
 			}
 		}
 		return null;
-
-		string? GetSubdirectory(string? root, params string[] parts)
-		{
-			if (string.IsNullOrEmpty(root))
-			{
-				return null;
-			}
-
-			string path = root;
-			foreach (string part in parts)
-			{
-				path = fileSystem.Path.Join(path, part);
-			}
-			return path;
-		}
 	}
 
-	private static string GetNote(PlatformGameStructure? platform, string? sourceDirectory)
+	private static IEnumerable<string?> GetPlatformCandidates(PlatformGameStructure platform)
 	{
+		FileSystem fileSystem = platform.FileSystem;
+		yield return GetSubdirectory(fileSystem, platform.StreamingAssetsPath, "aa");
+		yield return GetSubdirectory(fileSystem, platform.RootPath, "assets", "aa");
+		yield return GetSubdirectory(fileSystem, platform.RootPath, "aa");
+		yield return GetSubdirectory(fileSystem, platform.GameDataPath, "Raw", "aa");
+	}
+
+	private static IEnumerable<string?> GetInputCandidates(string inputPath)
+	{
+		yield return Path.Join(inputPath, "assets", "aa");
+		yield return Path.Join(inputPath, "aa");
+		yield return Path.Join(inputPath, "apk", "assets", "aa");
+	}
+
+	private static string? GetSubdirectory(FileSystem fileSystem, string? root, params string[] parts)
+	{
+		if (string.IsNullOrEmpty(root))
+		{
+			return null;
+		}
+
+		string path = root;
+		foreach (string part in parts)
+		{
+			path = fileSystem.Path.Join(path, part);
+		}
+		return path;
+	}
+
+	private static string GetNote(PlatformGameStructure? platform, SourceLocation? source)
+	{
+		if (source is not null)
+		{
+			return "Catalog keys are not remapped to the exported asset paths.";
+		}
 		if (platform is null)
 		{
-			return "Platform structure is unavailable (mixed or raw file input); Addressables files were not copied.";
+			return "Platform structure is unavailable and no Addressables 'aa' directory was found in the input paths.";
 		}
-		if (sourceDirectory is null)
-		{
-			return "No Addressables 'aa' directory was found.";
-		}
-
-		return "Catalog keys are not remapped to the exported asset paths.";
+		return "No Addressables 'aa' directory was found.";
 	}
+
+	private sealed record class SourceLocation(FileSystem FileSystem, string Directory);
 }
