@@ -6,14 +6,23 @@ namespace AssetRipper.Export.UnityProjects.MissingReferences;
 public sealed class MissingReferenceCollector
 {
 	private readonly List<MissingReferenceInfo> references = new();
-	private readonly HashSet<string> keys = new(StringComparer.Ordinal);
+	private readonly Dictionary<string, MissingReferenceInfo> referencesByKey = new(StringComparer.Ordinal);
 
+	/// <summary>
+	/// The number of distinct missing references.
+	/// </summary>
 	public int Count => references.Count;
+
+	/// <summary>
+	/// The total number of times missing references were written.
+	/// </summary>
+	public int TotalOccurrences { get; private set; }
 
 	public void Clear()
 	{
 		references.Clear();
-		keys.Clear();
+		referencesByKey.Clear();
+		TotalOccurrences = 0;
 	}
 
 	public void Add(MissingReferenceInfo info)
@@ -26,8 +35,14 @@ public sealed class MissingReferenceCollector
 			info.TargetFileID.ToString(),
 			info.TargetPathID.ToString());
 
-		if (keys.Add(key))
+		TotalOccurrences++;
+		if (referencesByKey.TryGetValue(key, out MissingReferenceInfo? existing))
 		{
+			existing.Occurrences++;
+		}
+		else
+		{
+			referencesByKey.Add(key, info);
 			references.Add(info);
 		}
 	}

@@ -16,6 +16,7 @@ public static class MissingReferencesPostExporter
 			ExportVersion = settings.Version.ToString(),
 			PlaceholderGuid = UnityGuid.MissingReference.ToString(),
 			TotalCount = collector.Count,
+			TotalOccurrences = collector.TotalOccurrences,
 			References = collector.GetSortedReferences().Select(info => new MissingReferenceInfo
 			{
 				ReferrerPath = GetRelativePath(fileSystem, projectRootPath, info.ReferrerPath),
@@ -31,6 +32,7 @@ public static class MissingReferencesPostExporter
 				TargetSourceFile = info.TargetSourceFile,
 				Reason = info.Reason,
 				PlaceholderFileID = info.PlaceholderFileID,
+				Occurrences = info.Occurrences,
 			}).ToList(),
 		};
 
@@ -46,7 +48,7 @@ public static class MissingReferencesPostExporter
 		}
 		else
 		{
-			Logger.Warning(LogCategory.Export, $"{report.TotalCount} missing references were found. See '{FileName}'.");
+			Logger.Warning(LogCategory.Export, $"{report.TotalCount} distinct missing references ({report.TotalOccurrences} occurrences) were found. See '{FileName}'.");
 		}
 	}
 

@@ -7,6 +7,7 @@ public sealed class MissingReferencesReport
 	public string ExportVersion { get; set; } = string.Empty;
 	public string PlaceholderGuid { get; set; } = string.Empty;
 	public int TotalCount { get; set; }
+	public int TotalOccurrences { get; set; }
 	public List<MissingReferenceInfo> References { get; set; } = new();
 }
 

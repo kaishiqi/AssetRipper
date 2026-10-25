@@ -41,6 +41,12 @@ public sealed class MissingReferenceInfo
 	public MissingReferenceReason Reason { get; set; }
 
 	/// <summary>
+	/// How many times this exact reference was written. Values greater than one occur in lists
+	/// or when the same pointer is emitted more than once.
+	/// </summary>
+	public int Occurrences { get; set; } = 1;
+
+	/// <summary>
 	/// The synthetic file ID written into the YAML placeholder.
 	/// </summary>
 	public long PlaceholderFileID { get; set; }
