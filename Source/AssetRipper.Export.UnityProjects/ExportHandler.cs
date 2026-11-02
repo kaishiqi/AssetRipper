@@ -7,6 +7,7 @@ using AssetRipper.Export.UnityProjects.MissingReferences;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Scripts;
+using AssetRipper.Export.UnityProjects.Shaders;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure;
@@ -159,6 +160,7 @@ public class ExportHandler
 		yield return new PathIdMapExporter();
 		yield return new GuidMapPostExporter();
 		yield return new AudioReportPostExporter();
+		yield return new ShaderReportPostExporter();
 	}
 
 	public GameData LoadAndProcess(IReadOnlyList<string> paths, FileSystem fileSystem)
