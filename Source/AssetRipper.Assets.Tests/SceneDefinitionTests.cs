@@ -35,6 +35,42 @@ public class SceneDefinitionTests
 	}
 
 	[Test]
+	public void FromName_ProducesStableGuid()
+	{
+		UnityGuid first = SceneDefinition.FromName("testScene").GUID;
+		UnityGuid second = SceneDefinition.FromName("testScene").GUID;
+		UnityGuid other = SceneDefinition.FromName("otherScene").GUID;
+
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(first, Is.EqualTo(second));
+			Assert.That(first, Is.Not.EqualTo(other));
+		}
+	}
+
+	[Test]
+	public void FromPath_ProducesStableGuid()
+	{
+		UnityGuid first = SceneDefinition.FromPath("Assets/Scenes/testScene").GUID;
+		UnityGuid second = SceneDefinition.FromPath("Assets/Scenes/testScene").GUID;
+		UnityGuid other = SceneDefinition.FromPath("Assets/Scenes/otherScene").GUID;
+
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(first, Is.EqualTo(second));
+			Assert.That(first, Is.Not.EqualTo(other));
+		}
+	}
+
+	[Test]
+	public void ExplicitGuidIsNotOverridden()
+	{
+		UnityGuid guid = UnityGuid.Parse("0123456789abcdef0123456789abcdef");
+		SceneDefinition sceneDefinition = SceneDefinition.FromPath("Assets/Scenes/testScene", guid);
+		Assert.That(sceneDefinition.GUID, Is.EqualTo(guid));
+	}
+
+	[Test]
 	public void AddCollection_AddsCollectionToSceneDefinition()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");

@@ -38,11 +38,15 @@ public sealed class CommandsPage : VuePage
 			}
 			using (new P(writer).End())
 			{
-				using (new Form(writer).End())
+				using (new Div(writer).WithClass("input-group mb-2").End())
 				{
 					new Input(writer).WithClass("form-control").WithType("text").WithName("Path")
 						.WithCustomAttribute("v-model", "export_path")
 						.WithCustomAttribute("@input", "handleExportPathChange").Close();
+					if (Dialogs.Supported)
+					{
+						new Button(writer).WithType("button").WithCustomAttribute("@click", "handleSelectExportFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
+					}
 				}
 
 				using (new Div(writer).WithClass("form-check mb-2").End())
@@ -60,10 +64,25 @@ public sealed class CommandsPage : VuePage
 						.Close(Localization.CreateSubfolder);
 				}
 
+				using (new Div(writer).WithClass("input-group mb-2").End())
+				{
+					new Input(writer).WithClass("form-control").WithType("text").WithName("ReferencePath")
+						.WithId("referenceProjectPath")
+						.WithCustomAttribute("v-model", "reference_export_path")
+						.WithCustomAttribute("placeholder", Localization.ReferenceProjectPath).Close();
+					if (Dialogs.Supported)
+					{
+						new Button(writer).WithType("button").WithCustomAttribute("@click", "handleSelectReferenceFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
+					}
+				}
+
+				new P(writer).WithClass("form-text text-muted").Close(Localization.ReferenceProjectPathHint);
+
 				using (new Form(writer).WithAction("/Export/UnityProject").WithMethod("post").End())
 				{
 					new Input(writer).WithType("hidden").WithName("Path").WithCustomAttribute("v-model", "export_path").Close();
 					new Input(writer).WithType("hidden").WithName("CreateSubfolder").WithCustomAttribute("v-model", "create_subfolder").Close();
+					new Input(writer).WithType("hidden").WithName("ReferencePath").WithCustomAttribute("v-model", "reference_export_path").Close();
 
 					new Button(writer).WithCustomAttribute("v-if", "export_path === '' || export_path !== export_path.trim()").WithClass("btn btn-primary").WithCustomAttribute("disabled").Close(Localization.ExportUnityProject);
 					new Input(writer).WithCustomAttribute("v-else-if", "export_path_has_files").WithType("submit").WithClass("btn btn-danger").WithValue(Localization.ExportUnityProject).Close();
@@ -80,11 +99,6 @@ public sealed class CommandsPage : VuePage
 					new Input(writer).WithCustomAttribute("v-else").WithType("submit").WithClass("btn btn-primary").WithValue(Localization.ExportPrimaryContent).Close();
 				}
 
-				if (Dialogs.Supported)
-				{
-					new Button(writer).WithCustomAttribute("@click", "handleSelectExportFolder").WithClass("btn btn-success").Close(Localization.SelectFolder);
-				}
-
 				using (new Div(writer).WithCustomAttribute("v-if", "export_path_has_files").End())
 				{
 					new P(writer).Close(Localization.WarningThisDirectoryIsNotEmptyAllContentWillBeDeleted);
@@ -96,6 +110,11 @@ public sealed class CommandsPage : VuePage
 	protected override void WriteScriptReferences(TextWriter writer)
 	{
 		base.WriteScriptReferences(writer);
+		string initialReferencePath = System.Text.Json.JsonEncodedText.Encode(GameFileLoader.Settings.ExportSettings.ReferenceProjectPath ?? string.Empty).ToString();
+		using (new Script(writer).End())
+		{
+			writer.Write($"window.initialReferenceExportPath = \"{initialReferencePath}\";");
+		}
 		new Script(writer).WithSrc("/js/commands_page.js").Close();
 	}
 

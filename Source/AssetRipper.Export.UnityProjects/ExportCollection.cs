@@ -17,6 +17,7 @@ using AssetRipper.SourceGenerated.Classes.ClassID_240;
 using AssetRipper.SourceGenerated.Classes.ClassID_28;
 using AssetRipper.SourceGenerated.Classes.ClassID_319;
 using AssetRipper.SourceGenerated.Classes.ClassID_48;
+using AssetRipper.SourceGenerated.Classes.ClassID_687078895;
 using AssetRipper.SourceGenerated.Classes.ClassID_62;
 using AssetRipper.SourceGenerated.Classes.ClassID_74;
 using AssetRipper.SourceGenerated.Classes.ClassID_84;
@@ -42,7 +43,7 @@ public abstract class ExportCollection : IExportCollection
 		writer.IsWriteDefaultTag = false;
 		writer.IsWriteVersion = false;
 		writer.IsFormatKeys = true;
-		YamlDocument doc = meta.ExportYamlDocument(container);
+		YamlDocument doc = meta.ExportYamlDocument(container, metaPath);
 		writer.AddDocument(doc);
 		writer.Write(streamWriter);
 	}
@@ -69,6 +70,17 @@ public abstract class ExportCollection : IExportCollection
 
 	protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath, FileSystem fileSystem)
 	{
+		return GetUniqueFileName(asset, dirPath, fileSystem, out _);
+	}
+
+	protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath, FileSystem fileSystem, out string originalFileName)
+	{
+		originalFileName = GetAssetFileName(asset);
+		return GetUniqueFileName(dirPath, originalFileName, fileSystem);
+	}
+
+	private string GetAssetFileName(IUnityObjectBase asset)
+	{
 		string fileName = asset.GetBestName();
 		fileName = FileSystem.RemoveCloneSuffixes(fileName);
 		fileName = FileSystem.RemoveInstanceSuffixes(fileName);
@@ -82,8 +94,7 @@ public abstract class ExportCollection : IExportCollection
 			fileName = FileSystem.FixInvalidFileNameCharacters(fileName);
 		}
 
-		fileName = $"{fileName}.{GetExportExtension(asset)}";
-		return GetUniqueFileName(dirPath, fileName, fileSystem);
+		return $"{fileName}.{GetExportExtension(asset)}";
 	}
 
 	protected static string GetUniqueFileName(string directoryPath, string fileName, FileSystem fileSystem)
@@ -97,6 +108,7 @@ public abstract class ExportCollection : IExportCollection
 		return asset switch
 		{
 			IShader => "shader",
+			ISpriteAtlas => "spriteatlas",
 			IMaterial => "mat",
 			IAnimationClip => "anim",
 			IAnimatorController => "controller",

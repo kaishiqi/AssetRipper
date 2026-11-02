@@ -120,17 +120,20 @@ public sealed partial class SpriteProcessor : IAssetProcessor
 		}
 
 		// Some sprite properties must be recalculated with regard to SpriteAtlas. See the comments inside the following method.
-		sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border);
-		sprite.Rect.CopyValues(rect);
-		sprite.Pivot?.CopyValues(pivot);
-		sprite.Border?.CopyValues(border);
+		// Sprites that are not packed into an atlas keep their serialized Rect/Pivot/Border/Offset.
+		if (sprite.GetSpriteCoordinatesInAtlas(atlas, out RectangleF rect, out Vector2 pivot, out Vector4 border))
+		{
+			sprite.Rect.CopyValues(rect);
+			sprite.Pivot?.CopyValues(pivot);
+			sprite.Border?.CopyValues(border);
 
-		// Calculate and overwrite Offset. It is the offset in pixels of the pivot to the center of Rect.
-		sprite.Offset.X = (pivot.X - 0.5f) * rect.Width;
-		sprite.Offset.Y = (pivot.Y - 0.5f) * rect.Height;
+			// Calculate and overwrite Offset. It is the offset in pixels of the pivot to the center of Rect.
+			sprite.Offset.X = (pivot.X - 0.5f) * rect.Width;
+			sprite.Offset.Y = (pivot.Y - 0.5f) * rect.Height;
+		}
 
 		// Calculate and overwrite TextureRectOffset. It is the offset in pixels of m_RD.TextureRect to Rect.
-		sprite.RD.TextureRectOffset.X = sprite.RD.TextureRect.X - rect.X;
-		sprite.RD.TextureRectOffset.Y = sprite.RD.TextureRect.Y - rect.Y;
+		sprite.RD.TextureRectOffset.X = sprite.RD.TextureRect.X - sprite.Rect.X;
+		sprite.RD.TextureRectOffset.Y = sprite.RD.TextureRect.Y - sprite.Rect.Y;
 	}
 }

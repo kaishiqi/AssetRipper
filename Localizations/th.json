@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "โฟลเดอร์อ้างอิง (ไม่บังคับ)",
+    "reference_project_path_hint": "แอสเซทที่มีพาธเดียวกับในโฟลเดอร์อ้างอิงจะใช้ GUID จาก .meta ของโฟลเดอร์นั้นซ้ำ เว้นว่างไว้เพื่อสร้าง GUID ใหม่",
     "asset_ripper_free": "AssetRipper ฟรี",
     "asset_ripper_premium": "AssetRipper ขั้นสูง",
     "asset_tab_audio_duration_unknown": "<ไม่ทราบ>",

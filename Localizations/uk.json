@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Папка-зразок (необов'язково)",
+    "reference_project_path_hint": "Ресурси з тим самим шляхом, що й у папці-зразку, повторно використовують GUID з її .meta. Залиште порожнім, щоб згенерувати нові GUID.",
     "asset_tab_audio": "Аудіо",
     "asset_tab_audio_duration_unknown": "<Невідомо>",
     "asset_tab_audio_pause": "Пауза",

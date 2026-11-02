@@ -107,7 +107,8 @@ public static class Commands
 			{
 				bool createSubfolder = TryGetCreateSubfolder(form);
 				path = MaybeAppendTimestampedSubfolder(path, createSubfolder);
-				await GameFileLoader.ExportUnityProject(path);
+				string? referencePath = form.TryGetValue("ReferencePath", out StringValues referenceValues) ? referenceValues.ToString() : null;
+				await GameFileLoader.ExportUnityProject(path, referencePath);
 			}
 			return null;
 		}

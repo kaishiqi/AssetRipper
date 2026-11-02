@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "Folder referencyjny (opcjonalnie)",
+    "reference_project_path_hint": "Zasoby o tej samej ścieżce co w folderze referencyjnym używają ponownie identyfikatora GUID z pliku .meta. Pozostaw puste, aby wygenerować nowe identyfikatory GUID.",
     "asset_tab_audio": "Dźwięk",
     "asset_tab_audio_duration_unknown": "<Nieznany>",
     "asset_tab_audio_pause": "Pauza",

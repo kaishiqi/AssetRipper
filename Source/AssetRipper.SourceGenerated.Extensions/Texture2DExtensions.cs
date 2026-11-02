@@ -60,6 +60,21 @@ public static class Texture2DExtensions
 
 		public bool Mips => texture.MipMap_C28 || texture.MipCount_C28 > 1;
 
+		/// <summary>
+		/// Whether this texture has pixel data, either inline or in a resource file.
+		/// </summary>
+		public bool HasImageData()
+		{
+			if (!texture.ImageData_C28.IsNullOrEmpty())
+			{
+				return true;
+			}
+
+			return texture.StreamData_C28 is not null
+				&& texture.StreamData_C28.IsSet()
+				&& texture.StreamData_C28.Size > 0;
+		}
+
 		public bool CheckAssetIntegrity()
 		{
 			if (!texture.ImageData_C28.IsNullOrEmpty())

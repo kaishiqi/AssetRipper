@@ -57,6 +57,10 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 	{
 		if (m_convert)
 		{
+			if (AssetExporter.ExportTexturePlaceholders && asset is ITexture2D texture && TextureAssetExporter.IsPlaceholder(texture))
+			{
+				return AssetExporter.ImageExportFormat.GetFileExtension();
+			}
 			return asset.GetTextureExtension(AssetExporter.PreferOriginalTextureExtension, AssetExporter.ImageExportFormat);
 		}
 		return base.GetExportExtension(asset);
@@ -87,7 +91,11 @@ public class TextureExportCollection : AssetsExportCollection<ITexture2D>
 		{
 			ISprite sprite = textureSpriteInformation.Keys.First();
 			ITexture2D texture = Asset;
-			if (sprite.Rect == sprite.RD.TextureRect && sprite.Name == texture.Name)
+			// A sprite covering the whole texture is imported as a single sprite.
+			// Compare against the texture size instead of RD.TextureRect because tight meshes have a smaller TextureRect.
+			bool coversWholeTexture = sprite.Rect.X == 0 && sprite.Rect.Y == 0
+				&& sprite.Rect.Width == texture.Width_C28 && sprite.Rect.Height == texture.Height_C28;
+			if (coversWholeTexture && sprite.Name == texture.Name)
 			{
 				importer.SpriteModeE = SpriteImportMode.Single;
 			}

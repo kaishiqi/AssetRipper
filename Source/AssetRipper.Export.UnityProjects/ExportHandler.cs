@@ -1,8 +1,14 @@
 ﻿using AssetRipper.Assets.Bundles;
 using AssetRipper.Export.Configuration;
+using AssetRipper.Export.UnityProjects.Addressables;
+using AssetRipper.Export.UnityProjects.Audio;
+using AssetRipper.Export.UnityProjects.Diagnostics;
+using AssetRipper.Export.UnityProjects.MissingReferences;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Scripts;
+using AssetRipper.Export.UnityProjects.Shaders;
+using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure;
@@ -21,6 +27,8 @@ namespace AssetRipper.Export.UnityProjects;
 public class ExportHandler
 {
 	protected FullConfiguration Settings { get; }
+	private IReadOnlyList<string> inputPaths = [];
+	private FileSystem? inputFileSystem;
 
 	public ExportHandler(FullConfiguration settings)
 	{
@@ -29,6 +37,9 @@ public class ExportHandler
 
 	public GameData Load(IReadOnlyList<string> paths, FileSystem fileSystem)
 	{
+		inputPaths = paths;
+		inputFileSystem = fileSystem;
+
 		if (paths.Count == 1)
 		{
 			Logger.Info(LogCategory.Import, $"Attempting to read files from {paths[0]}");
@@ -106,6 +117,12 @@ public class ExportHandler
 		BeforeExport(projectExporter);
 		projectExporter.DoFinalOverrides(Settings);
 		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
+		PathCasingRestorer.Restore(Settings, fileSystem);
+		GuidReconciler.Reconcile(Settings, fileSystem);
+		TextReferenceRepairer.Repair(Settings, fileSystem, projectExporter.Renames.Items);
+		DynamicFontAtlasPostProcessor.Process(Settings, fileSystem);
+		DuplicateAssetsReport.Write(Settings, fileSystem);
+		MissingReferencesPostExporter.Write(Settings, fileSystem, projectExporter.MissingReferences);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");
 
@@ -114,6 +131,11 @@ public class ExportHandler
 			postExporter.DoPostExport(gameData, Settings, fileSystem);
 		}
 		Logger.Info(LogCategory.Export, "Finished post-export");
+
+		if (Settings.ExportSettings.FailOnMissingReferences && projectExporter.MissingReferences.Count > 0)
+		{
+			throw new InvalidOperationException($"Export completed with {projectExporter.MissingReferences.Count} missing references. See '{MissingReferencesPostExporter.FileName}'.");
+		}
 
 		static string GetListOfVersions(GameBundle gameBundle)
 		{
@@ -135,8 +157,14 @@ public class ExportHandler
 		yield return new ProjectVersionPostExporter();
 		yield return new PackageManifestPostExporter();
 		yield return new StreamingAssetsPostExporter();
+		yield return new AddressablesPostExporter(inputPaths, inputFileSystem);
+		yield return new AssetReferenceReportPostExporter();
+		yield return new DataConfigReportPostExporter();
 		yield return new DllPostExporter();
 		yield return new PathIdMapExporter();
+		yield return new GuidMapPostExporter();
+		yield return new AudioReportPostExporter();
+		yield return new ShaderReportPostExporter();
 	}
 
 	public GameData LoadAndProcess(IReadOnlyList<string> paths, FileSystem fileSystem)

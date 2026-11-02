@@ -7,7 +7,8 @@ const app = createApp({
 			load_path_exists: false,
 			export_path: '',
 			export_path_has_files: false,
-			create_subfolder: false
+			create_subfolder: false,
+			reference_export_path: window.initialReferenceExportPath ?? ''
 		}
 	},
 	methods: {
@@ -89,6 +90,21 @@ const app = createApp({
 					console.error('Error fetching data:', error);
 				}
 				await this.handleExportPathChange();
+			}, 300); // Adjust the debounce time as needed (300 milliseconds in this example)
+		},
+		async handleSelectReferenceFolder() {
+			// Add a debounce mechanism to avoid too many requests in a short time
+			if (this.debouncedInput) {
+				clearTimeout(this.debouncedInput);
+			}
+
+			this.debouncedInput = setTimeout(async () => {
+				try {
+					const response = await fetch(`/Dialogs/OpenFolder`);
+					this.reference_export_path = await response.json();
+				} catch (error) {
+					console.error('Error fetching data:', error);
+				}
 			}, 300); // Adjust the debounce time as needed (300 milliseconds in this example)
 		},
 		async fetchFileExists(path) {

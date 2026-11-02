@@ -1,4 +1,6 @@
 {
+    "reference_project_path": "참조 폴더 (선택 사항)",
+    "reference_project_path_hint": "참조 폴더와 경로가 같은 에셋은 해당 폴더의 .meta GUID를 재사용합니다. 비워 두면 새 GUID를 생성합니다.",
     "welcome_title": "AssetRipper에 오신 것을 환영합니다.",
     "image_export_title": "Image 추출 형식",
     "shader_asset_export_title": "Shader 추출 형식",
