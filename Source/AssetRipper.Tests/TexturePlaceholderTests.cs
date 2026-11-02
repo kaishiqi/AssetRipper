@@ -40,6 +40,8 @@ internal class TexturePlaceholderTests
 		{
 			Assert.That(meta, Does.Contain("isReadable: 1"));
 			Assert.That(meta, Does.Contain("textureCompression: 0"));
+			Assert.That(meta, Does.Contain("textureType: 10"));
+			Assert.That(meta, Does.Contain("sRGBTexture: 0"));
 		}
 	}
 

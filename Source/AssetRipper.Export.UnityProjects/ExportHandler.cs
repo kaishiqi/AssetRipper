@@ -8,6 +8,7 @@ using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Export.UnityProjects.Scripts;
 using AssetRipper.Export.UnityProjects.Shaders;
+using AssetRipper.Export.UnityProjects.Textures;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
 using AssetRipper.Import.Structure;
@@ -119,6 +120,7 @@ public class ExportHandler
 		PathCasingRestorer.Restore(Settings, fileSystem);
 		GuidReconciler.Reconcile(Settings, fileSystem);
 		TextReferenceRepairer.Repair(Settings, fileSystem, projectExporter.Renames.Items);
+		DynamicFontAtlasPostProcessor.Process(Settings, fileSystem);
 		DuplicateAssetsReport.Write(Settings, fileSystem);
 		MissingReferencesPostExporter.Write(Settings, fileSystem, projectExporter.MissingReferences);
 

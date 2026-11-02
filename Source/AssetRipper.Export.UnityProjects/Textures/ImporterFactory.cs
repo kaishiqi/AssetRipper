@@ -23,7 +23,7 @@ public static class ImporterFactory
 		bool isPlaceholder = origin is ITexture2D texture && TextureAssetExporter.IsPlaceholder(texture);
 		ITextureImporter instance = TextureImporter.Create(container.File, container.ExportVersion);
 		instance.MipMaps.EnableMipMap = data.EnableMipMap ? 1 : 0;
-		instance.MipMaps.SRGBTexture = data.SRGBTexture ? 1 : 0;
+		instance.MipMaps.SRGBTexture = isPlaceholder ? 0 : (data.SRGBTexture ? 1 : 0);
 		instance.MipMaps.AlphaTestReferenceValue = 0.5f;
 		instance.MipMaps.MipMapFadeDistanceStart = 1;
 		instance.MipMaps.MipMapFadeDistanceEnd = 3;
@@ -60,6 +60,12 @@ public static class ImporterFactory
 		instance.TextureTypeE = instance.Has_TextureShape() || origin is not ICubemap
 			? data.TextureType
 			: TextureImporterType.Advanced;
+		if (isPlaceholder)
+		{
+			// Unity 2022 reads textureType, not the legacy textureFormat field.
+			// SingleChannel (Alpha8) matches what TMP dynamic font atlases require.
+			instance.TextureTypeE = TextureImporterType.SingleChannel;
+		}
 		instance.TextureShapeE = data.TextureShape;
 
 		ITextureImporterPlatformSettings platformSettings = instance.PlatformSettings.AddNew();
