@@ -41,7 +41,7 @@ public static class MissingReferencesPostExporter
 
 		if (report.NullInSourceCount > 0)
 		{
-			string truncated = report.NullInSourceTruncated ? $", truncated to {MissingReferenceCollector.MaxNullInSourceReferences}" : string.Empty;
+			string truncated = report.NullInSourceTruncated ? $", truncated to {collector.NullInSourceLimit}" : string.Empty;
 			Logger.Info(LogCategory.Export, $"{report.NullInSourceCount} distinct null source pointers ({report.NullInSourceOccurrences} occurrences{truncated}) were found. These are not export failures.");
 		}
 	}

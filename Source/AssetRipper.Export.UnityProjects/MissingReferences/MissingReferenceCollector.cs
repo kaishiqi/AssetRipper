@@ -6,10 +6,15 @@ namespace AssetRipper.Export.UnityProjects.MissingReferences;
 public sealed class MissingReferenceCollector
 {
 	/// <summary>
-	/// Null pointers are extremely common, so the report keeps only the first
-	/// <see cref="MaxNullInSourceReferences"/> distinct entries.
+	/// The default number of distinct null source pointers kept in the report.
+	/// Override with the <c>ASSETRIPPER_NULL_IN_SOURCE_LIMIT</c> environment variable.
 	/// </summary>
-	public const int MaxNullInSourceReferences = 20000;
+	public const int DefaultNullInSourceLimit = 20000;
+
+	/// <summary>
+	/// The number of distinct null source pointers kept in the report. Zero disables the list.
+	/// </summary>
+	public int NullInSourceLimit { get; set; } = GetDefaultNullInSourceLimit();
 
 	private readonly List<MissingReferenceInfo> references = new();
 	private readonly Dictionary<ReferenceKey, MissingReferenceInfo> referencesByKey = new();
@@ -39,7 +44,7 @@ public sealed class MissingReferenceCollector
 	public int NullInSourceOccurrences { get; private set; }
 
 	/// <summary>
-	/// True when <see cref="NullInSourceCount"/> reached <see cref="MaxNullInSourceReferences"/>.
+	/// True when <see cref="NullInSourceCount"/> reached <see cref="NullInSourceLimit"/>.
 	/// </summary>
 	public bool NullInSourceTruncated { get; private set; }
 
@@ -64,10 +69,16 @@ public sealed class MissingReferenceCollector
 	public void AddNullInSource(MissingReferenceInfo info)
 	{
 		NullInSourceOccurrences++;
-		if (AddOrIncrement(info, nullInSourceReferences, nullInSourceReferencesByKey, MaxNullInSourceReferences) < 0)
+		if (AddOrIncrement(info, nullInSourceReferences, nullInSourceReferencesByKey, NullInSourceLimit) < 0)
 		{
 			NullInSourceTruncated = true;
 		}
+	}
+
+	private static int GetDefaultNullInSourceLimit()
+	{
+		string? value = Environment.GetEnvironmentVariable("ASSETRIPPER_NULL_IN_SOURCE_LIMIT");
+		return int.TryParse(value, out int limit) && limit >= 0 ? limit : DefaultNullInSourceLimit;
 	}
 
 	private static int AddOrIncrement(MissingReferenceInfo info, List<MissingReferenceInfo> list, Dictionary<ReferenceKey, MissingReferenceInfo> byKey, int limit)
