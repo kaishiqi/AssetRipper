@@ -27,7 +27,7 @@ public sealed class AssetReferenceReportPostExporter : IPostExporter
 		"[0-9a-fA-F]{32}",
 		RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-	private static readonly string[] ScanExtensions = [".asset", ".prefab"];
+	private static readonly string[] ScanExtensions = [".asset", ".prefab", ".unity"];
 
 	public void DoPostExport(GameData gameData, FullConfiguration settings, FileSystem fileSystem)
 	{
