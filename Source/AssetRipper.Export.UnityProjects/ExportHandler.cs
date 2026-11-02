@@ -166,6 +166,7 @@ public class ExportHandler
 		yield return new GuidMapPostExporter();
 		yield return new AudioReportPostExporter();
 		yield return new ShaderReportPostExporter();
+		yield return new TextureReportPostExporter();
 	}
 
 	public GameData LoadAndProcess(IReadOnlyList<string> paths, FileSystem fileSystem)
