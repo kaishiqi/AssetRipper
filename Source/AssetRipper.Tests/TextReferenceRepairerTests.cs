@@ -64,6 +64,35 @@ internal class TextReferenceRepairerTests
 	}
 
 	[Test]
+	public void PageFoundInAnotherDirectoryIsNotReported()
+	{
+		VirtualFileSystem fileSystem = new();
+		fileSystem.Directory.Create(SpineDirectory);
+		fileSystem.Directory.Create(ProjectRoot + "/Assets/Texture2D");
+		fileSystem.File.WriteAllText(AtlasPath, "fire_2.png\nsize: 64,64\n");
+		fileSystem.File.WriteAllText(ProjectRoot + "/Assets/Texture2D/fire_2.png", "image");
+
+		AssetRenameInfo rename = new()
+		{
+			AssetName = "other",
+			ClassID = 28,
+			OriginalFileName = "other.png",
+			ExportedFileName = "other_0.png",
+			Directory = ProjectRoot + "/Assets/Texture2D",
+		};
+
+		TextReferenceRepairer.Repair(CreateSettings(), fileSystem, [rename]);
+
+		string json = fileSystem.File.ReadAllText(ReportPath);
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(fileSystem.File.ReadAllText(AtlasPath), Does.StartWith("fire_2.png"));
+			Assert.That(json, Does.Contain("\"UnresolvedCount\": 0"));
+			Assert.That(json, Does.Contain("\"Repairs\": []"));
+		}
+	}
+
+	[Test]
 	public void UnmatchedPageIsReported()
 	{
 		VirtualFileSystem fileSystem = new();

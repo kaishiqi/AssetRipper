@@ -47,9 +47,10 @@ public static class TextReferenceRepairer
 		if (renames.Count > 0 && fileSystem.Directory.Exists(assetsPath))
 		{
 			Dictionary<string, List<AssetRenameInfo>> byStem = BuildLookup(fileSystem, renames);
+			HashSet<string> exportedFileNames = EnumerateExportedFileNames(fileSystem, assetsPath);
 			foreach (string textPath in EnumerateAtlasFiles(fileSystem, assetsPath))
 			{
-				RepairFile(fileSystem, projectRootPath, textPath, byStem, report);
+				RepairFile(fileSystem, projectRootPath, textPath, byStem, exportedFileNames, report);
 			}
 		}
 
@@ -79,7 +80,7 @@ public static class TextReferenceRepairer
 		return byStem;
 	}
 
-	private static void RepairFile(FileSystem fileSystem, string projectRootPath, string textPath, Dictionary<string, List<AssetRenameInfo>> byStem, RenamedTexturesReport report)
+	private static void RepairFile(FileSystem fileSystem, string projectRootPath, string textPath, Dictionary<string, List<AssetRenameInfo>> byStem, HashSet<string> exportedFileNames, RenamedTexturesReport report)
 	{
 		string text;
 		try
@@ -107,6 +108,13 @@ public static class TextReferenceRepairer
 			}
 
 			if (fileSystem.File.Exists(fileSystem.Path.Join(directory, pageName)))
+			{
+				continue;
+			}
+
+			// The texture may live in a type folder such as Assets/Texture2D.
+			// Spine matches materials by texture name, not by directory.
+			if (ExistsAnywhere(exportedFileNames, pageName))
 			{
 				continue;
 			}
@@ -235,6 +243,37 @@ public static class TextReferenceRepairer
 				yield return filePath;
 			}
 		}
+	}
+
+	private static HashSet<string> EnumerateExportedFileNames(FileSystem fileSystem, string assetsPath)
+	{
+		HashSet<string> names = new(StringComparer.OrdinalIgnoreCase);
+		foreach (string filePath in fileSystem.Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories))
+		{
+			names.Add(fileSystem.Path.GetFileName(filePath));
+		}
+		return names;
+	}
+
+	private static bool ExistsAnywhere(HashSet<string> exportedFileNames, string pageName)
+	{
+		if (exportedFileNames.Contains(pageName))
+		{
+			return true;
+		}
+
+		// Some atlases omit the image extension in the page name.
+		if (Path.GetExtension(pageName).Length == 0)
+		{
+			foreach (string extension in ImageExtensions)
+			{
+				if (exportedFileNames.Contains(pageName + extension))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private static void Write(FullConfiguration settings, FileSystem fileSystem, RenamedTexturesReport report)
