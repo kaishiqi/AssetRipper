@@ -11,6 +11,11 @@ namespace AssetRipper.Assets.Collections;
 /// </summary>
 public sealed class SerializedAssetCollection : AssetCollection
 {
+	/// <summary>
+	/// Whether the source serialized file contained type trees for its objects.
+	/// </summary>
+	public bool HasTypeTree { get; private set; }
+
 	private FileIdentifier[]? DependencyIdentifiers { get; set; }
 
 	private SerializedAssetCollection(Bundle bundle) : base(bundle)
@@ -61,6 +66,7 @@ public sealed class SerializedAssetCollection : AssetCollection
 			Platform = file.Platform,
 			Flags = file.Flags,
 			EndianType = file.EndianType,
+			HasTypeTree = file.HasTypeTree,
 		};
 		ReadOnlySpan<FileIdentifier> fileDependencies = file.Dependencies;
 		if (fileDependencies.Length > 0)

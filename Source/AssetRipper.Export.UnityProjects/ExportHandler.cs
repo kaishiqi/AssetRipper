@@ -160,6 +160,7 @@ public class ExportHandler
 		yield return new AddressablesPostExporter(inputPaths, inputFileSystem);
 		yield return new AssetReferenceReportPostExporter();
 		yield return new DataConfigReportPostExporter();
+		yield return new MissingTypeTreeReportPostExporter();
 		yield return new DllPostExporter();
 		yield return new PathIdMapExporter();
 		yield return new GuidMapPostExporter();
