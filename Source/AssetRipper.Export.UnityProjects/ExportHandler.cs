@@ -118,6 +118,7 @@ public class ExportHandler
 		PathCasingRestorer.Restore(Settings, fileSystem);
 		GuidReconciler.Reconcile(Settings, fileSystem);
 		TextReferenceRepairer.Repair(Settings, fileSystem, projectExporter.Renames.Items);
+		DuplicateAssetsReport.Write(Settings, fileSystem);
 		MissingReferencesPostExporter.Write(Settings, fileSystem, projectExporter.MissingReferences);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");
