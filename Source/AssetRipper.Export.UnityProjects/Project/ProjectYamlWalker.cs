@@ -114,6 +114,7 @@ public sealed class ProjectYamlWalker : YamlWalker
 	{
 		if (pptr.PathID == 0)
 		{
+			ReportNullInSource(pptr);
 			return MetaPtr.NullPtr.ExportYaml(container.ExportVersion);
 		}
 		else if (CurrentAsset.Collection.TryGetAsset(pptr, out TAsset? asset))
@@ -167,6 +168,27 @@ public sealed class ProjectYamlWalker : YamlWalker
 		info.Reason = reason;
 		info.PlaceholderFileID = placeholderFileID;
 		missingReferences?.Add(info);
+	}
+
+	/// <summary>
+	/// Records a pointer that was already null in the source data. Unity writes this as
+	/// <c>{fileID: 0}</c>; it is not an export failure, so it is kept out of the missing count.
+	/// </summary>
+	private void ReportNullInSource<TAsset>(PPtr<TAsset> pptr) where TAsset : IUnityObjectBase
+	{
+		if (missingReferences is null)
+		{
+			return;
+		}
+
+		MissingReferenceInfo info = CreateMissingReferenceInfo(GetClassID(typeof(TAsset)));
+		info.FieldPath = GetCurrentFieldPath();
+		info.TargetPathID = 0;
+		info.TargetFileID = pptr.FileID;
+		info.TargetSourceFile = GetDependencyName(pptr.FileID);
+		info.Reason = MissingReferenceReason.NullInSource;
+		info.PlaceholderFileID = 0;
+		missingReferences.AddNullInSource(info);
 	}
 
 	private void ReportMissingSceneObjectReference(IUnityObjectBase target, string fieldName, MetaPtr pointer)

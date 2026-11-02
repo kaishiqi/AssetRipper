@@ -17,23 +17,11 @@ public static class MissingReferencesPostExporter
 			PlaceholderGuid = UnityGuid.MissingReference.ToString(),
 			TotalCount = collector.Count,
 			TotalOccurrences = collector.TotalOccurrences,
-			References = collector.GetSortedReferences().Select(info => new MissingReferenceInfo
-			{
-				ReferrerPath = GetRelativePath(fileSystem, projectRootPath, info.ReferrerPath),
-				ReferrerSourceFile = info.ReferrerSourceFile,
-				ReferrerClassID = info.ReferrerClassID,
-				ReferrerPathID = info.ReferrerPathID,
-				ReferrerExportID = info.ReferrerExportID,
-				DocumentKind = info.DocumentKind,
-				FieldPath = info.FieldPath,
-				TargetClassID = info.TargetClassID,
-				TargetPathID = info.TargetPathID,
-				TargetFileID = info.TargetFileID,
-				TargetSourceFile = info.TargetSourceFile,
-				Reason = info.Reason,
-				PlaceholderFileID = info.PlaceholderFileID,
-				Occurrences = info.Occurrences,
-			}).ToList(),
+			References = collector.GetSortedReferences().Select(info => Copy(fileSystem, projectRootPath, info)).ToList(),
+			NullInSourceCount = collector.NullInSourceCount,
+			NullInSourceOccurrences = collector.NullInSourceOccurrences,
+			NullInSourceTruncated = collector.NullInSourceTruncated,
+			NullInSourceReferences = collector.GetSortedNullInSourceReferences().Select(info => Copy(fileSystem, projectRootPath, info)).ToList(),
 		};
 
 		string outputDirectory = settings.AuxiliaryFilesPath;
@@ -50,6 +38,33 @@ public static class MissingReferencesPostExporter
 		{
 			Logger.Warning(LogCategory.Export, $"{report.TotalCount} distinct missing references ({report.TotalOccurrences} occurrences) were found. See '{FileName}'.");
 		}
+
+		if (report.NullInSourceCount > 0)
+		{
+			string truncated = report.NullInSourceTruncated ? $", truncated to {MissingReferenceCollector.MaxNullInSourceReferences}" : string.Empty;
+			Logger.Info(LogCategory.Export, $"{report.NullInSourceCount} distinct null source pointers ({report.NullInSourceOccurrences} occurrences{truncated}) were found. These are not export failures.");
+		}
+	}
+
+	private static MissingReferenceInfo Copy(FileSystem fileSystem, string projectRootPath, MissingReferenceInfo info)
+	{
+		return new MissingReferenceInfo
+		{
+			ReferrerPath = GetRelativePath(fileSystem, projectRootPath, info.ReferrerPath),
+			ReferrerSourceFile = info.ReferrerSourceFile,
+			ReferrerClassID = info.ReferrerClassID,
+			ReferrerPathID = info.ReferrerPathID,
+			ReferrerExportID = info.ReferrerExportID,
+			DocumentKind = info.DocumentKind,
+			FieldPath = info.FieldPath,
+			TargetClassID = info.TargetClassID,
+			TargetPathID = info.TargetPathID,
+			TargetFileID = info.TargetFileID,
+			TargetSourceFile = info.TargetSourceFile,
+			Reason = info.Reason,
+			PlaceholderFileID = info.PlaceholderFileID,
+			Occurrences = info.Occurrences,
+		};
 	}
 
 	private static string GetRelativePath(FileSystem fileSystem, string projectRootPath, string path)

@@ -9,6 +9,7 @@ using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
 using AssetRipper.SourceGenerated.Extensions;
 using System.Reflection;
+using System.Text.Json;
 
 namespace AssetRipper.Tests;
 
@@ -37,6 +38,29 @@ internal class MissingReferencesReportTests
 			Assert.That(json, Does.Contain("\"TargetPathID\": 123456789"));
 			Assert.That(json, Does.Contain("\"Reason\": \"AssetNotFound\""));
 			Assert.That(json, Does.Contain("\"TotalCount\": 1"));
+		}
+	}
+
+	[Test]
+	public void NullSourcePointerIsReportedSeparately()
+	{
+		VirtualFileSystem fileSystem = new();
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+		collection.CreateMaterial();
+
+		Export(fileSystem, collection);
+
+		string json = fileSystem.File.ReadAllText(ReportPath);
+		using JsonDocument document = JsonDocument.Parse(json);
+		JsonElement root = document.RootElement;
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(root.GetProperty("TotalCount").GetInt32(), Is.Zero);
+			Assert.That(root.GetProperty("References").GetArrayLength(), Is.Zero);
+			Assert.That(root.GetProperty("NullInSourceCount").GetInt32(), Is.GreaterThan(0));
+			Assert.That(root.GetProperty("NullInSourceReferences").GetArrayLength(), Is.GreaterThan(0));
+			Assert.That(json, Does.Contain("\"Reason\": \"NullInSource\""));
+			Assert.That(json, Does.Contain("\"FieldPath\": \"m_Shader\""));
 		}
 	}
 

@@ -49,4 +49,10 @@ public enum MissingReferenceReason
 	/// The target was deliberately skipped.
 	/// </summary>
 	Skipped,
+
+	/// <summary>
+	/// The pointer was already null in the source data. Unity writes this as <c>{fileID: 0}</c>,
+	/// so it is not an export failure and must not be counted as a missing reference.
+	/// </summary>
+	NullInSource,
 }
