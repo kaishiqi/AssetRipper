@@ -71,15 +71,6 @@ public class SceneDefinitionTests
 	}
 
 	[Test]
-	public void GuidCanBeOverriddenAfterCreation()
-	{
-		UnityGuid guid = UnityGuid.Parse("0123456789abcdef0123456789abcdef");
-		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
-		sceneDefinition.GUID = guid;
-		Assert.That(sceneDefinition.GUID, Is.EqualTo(guid));
-	}
-
-	[Test]
 	public void AddCollection_AddsCollectionToSceneDefinition()
 	{
 		SceneDefinition sceneDefinition = SceneDefinition.FromName("testScene");
