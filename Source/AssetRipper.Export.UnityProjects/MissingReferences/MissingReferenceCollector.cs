@@ -12,10 +12,10 @@ public sealed class MissingReferenceCollector
 	public const int MaxNullInSourceReferences = 20000;
 
 	private readonly List<MissingReferenceInfo> references = new();
-	private readonly Dictionary<string, MissingReferenceInfo> referencesByKey = new(StringComparer.Ordinal);
+	private readonly Dictionary<ReferenceKey, MissingReferenceInfo> referencesByKey = new();
 
 	private readonly List<MissingReferenceInfo> nullInSourceReferences = new();
-	private readonly Dictionary<string, MissingReferenceInfo> nullInSourceReferencesByKey = new(StringComparer.Ordinal);
+	private readonly Dictionary<ReferenceKey, MissingReferenceInfo> nullInSourceReferencesByKey = new();
 
 	/// <summary>
 	/// The number of distinct missing references.
@@ -70,9 +70,16 @@ public sealed class MissingReferenceCollector
 		}
 	}
 
-	private static int AddOrIncrement(MissingReferenceInfo info, List<MissingReferenceInfo> list, Dictionary<string, MissingReferenceInfo> byKey, int limit)
+	private static int AddOrIncrement(MissingReferenceInfo info, List<MissingReferenceInfo> list, Dictionary<ReferenceKey, MissingReferenceInfo> byKey, int limit)
 	{
-		string key = GetKey(info);
+		ReferenceKey key = new(
+			info.ReferrerPath,
+			info.DocumentKind,
+			info.FieldPath,
+			info.TargetClassID,
+			info.TargetFileID,
+			info.TargetPathID);
+
 		if (byKey.TryGetValue(key, out MissingReferenceInfo? existing))
 		{
 			existing.Occurrences++;
@@ -89,16 +96,13 @@ public sealed class MissingReferenceCollector
 		return 1;
 	}
 
-	private static string GetKey(MissingReferenceInfo info)
-	{
-		return string.Join('\0',
-			info.ReferrerPath,
-			info.DocumentKind,
-			info.FieldPath,
-			info.TargetClassID.ToString(),
-			info.TargetFileID.ToString(),
-			info.TargetPathID.ToString());
-	}
+	private readonly record struct ReferenceKey(
+		string ReferrerPath,
+		string DocumentKind,
+		string FieldPath,
+		int TargetClassID,
+		int TargetFileID,
+		long TargetPathID);
 
 	public IReadOnlyList<MissingReferenceInfo> GetSortedReferences()
 	{
