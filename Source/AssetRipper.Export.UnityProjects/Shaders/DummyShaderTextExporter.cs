@@ -61,22 +61,32 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 			writer.Write($"Shader \"{parsedForm.Name}\" {{\n");
 			ExportProperties(parsedForm.PropInfo, state, writer);
 
+			TemplateShader? templateShader = TemplateList.GetBestTemplate(shader);
+			bool usesUiTemplate = templateShader?.TemplateName == "UI";
+
 			writer.Write("\tSubShader{\n");
 			WriteTags(subShader, pass, writer);
-			WriteRenderState(state, writer);
+			// The UI template emits its own property driven stencil block.
+			WriteRenderState(state, writer, !usesUiTemplate);
 
-			TemplateShader? templateShader = TemplateList.GetBestTemplate(shader);
-			writer.Write("\t\t//DummyShaderTextExporter\n");
-			if (templateShader != null)
+			// Keep the original pass count: Graphics.Blit and other APIs select passes by index,
+			// and a shader with fewer passes makes those calls fail at runtime.
+			int passCount = subShader is not null && subShader.Passes.Count > 0 ? subShader.Passes.Count : 1;
+			for (int i = 0; i < passCount; i++)
 			{
-				writer.Write(templateShader.ShaderText);
+				ISerializedPass? currentPass = subShader is not null && i < subShader.Passes.Count ? subShader.Passes[i] : null;
+				writer.Write("\t\t//DummyShaderTextExporter\n");
+				if (templateShader != null)
+				{
+					writer.Write(ApplyPassName(templateShader.ShaderText, GetPassName(currentPass)));
+				}
+				else
+				{
+					writer.WriteIndent(2);
+					writer.Write(FallbackDummyShader);
+				}
+				writer.Write('\n');
 			}
-			else
-			{
-				writer.WriteIndent(2);
-				writer.Write(FallbackDummyShader);
-			}
-			writer.Write('\n');
 			writer.Write("\t}\n");
 
 			if (parsedForm.FallbackName != string.Empty)
@@ -146,7 +156,32 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 		return null;
 	}
 
-	private static void WriteRenderState(ISerializedShaderState? state, TextWriter writer)
+	private static string? GetPassName(ISerializedPass? pass)
+	{
+		if (pass is null)
+		{
+			return null;
+		}
+
+		string name = pass.Name_R.String;
+		return string.IsNullOrEmpty(name) ? null : name;
+	}
+
+	/// <summary>
+	/// Insert a <c>Name</c> command into the template's <c>Pass</c> block.
+	/// </summary>
+	private static string ApplyPassName(string passText, string? passName)
+	{
+		if (string.IsNullOrEmpty(passName))
+		{
+			return passText;
+		}
+
+		int braceIndex = passText.IndexOf('{');
+		return braceIndex < 0 ? passText : passText.Insert(braceIndex + 1, $"\n\t\t\tName \"{passName}\"");
+	}
+
+	private static void WriteRenderState(ISerializedShaderState? state, TextWriter writer, bool includeStencil)
 	{
 		if (state is null)
 		{
@@ -164,7 +199,10 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 		writer.WriteIndent(2);
 		writer.Write($"Cull {GetStateValue(state.Culling, state.CullingValue)}\n");
 
-		WriteStencil(state, writer);
+		if (includeStencil)
+		{
+			WriteStencil(state, writer);
+		}
 	}
 
 	private static void WriteBlend(ISerializedShaderRTBlendState blend, TextWriter writer)
@@ -239,7 +277,7 @@ public sealed class DummyShaderTextExporter : ShaderExporterBase
 		return (comp == StencilComp.Disabled ? StencilComp.Always : comp).ToString();
 	}
 
-	private static bool IsStencilDefault(ISerializedShaderState state)
+	internal static bool IsStencilDefault(ISerializedShaderState state)
 	{
 		return IsStencilValueDefault(state.StencilRef, 0.0f)
 			&& IsStencilValueDefault(state.StencilReadMask, 255.0f)

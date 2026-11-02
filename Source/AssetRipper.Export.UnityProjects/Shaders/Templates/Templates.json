@@ -31,6 +31,50 @@
 					"PropertyName" : "_Color",
 					"PropertyTypeName" : "Color"
 				}]
+		},
+		{
+			"TemplateName" : "UI",
+			"RequiredProperties" : [
+				{
+					"PropertyName" : "_MainTex",
+					"PropertyTypeName" : "Texture"
+				},
+				{
+					"PropertyName" : "_Color",
+					"PropertyTypeName" : "Color"
+				},
+				{
+					"PropertyName" : "_Stencil",
+					"PropertyTypeName" : "Single"
+				},
+				{
+					"PropertyName" : "_StencilComp",
+					"PropertyTypeName" : "Single"
+				},
+				{
+					"PropertyName" : "_StencilOp",
+					"PropertyTypeName" : "Single"
+				},
+				{
+					"PropertyName" : "_StencilReadMask",
+					"PropertyTypeName" : "Single"
+				},
+				{
+					"PropertyName" : "_StencilWriteMask",
+					"PropertyTypeName" : "Single"
+				},
+				{
+					"PropertyName" : "_ColorMask",
+					"PropertyTypeName" : "Single"
+				},
+				{
+					"PropertyName" : "_ClipRect",
+					"PropertyTypeName" : "Vector"
+				},
+				{
+					"PropertyName" : "_TextureSampleAdd",
+					"PropertyTypeName" : "Vector"
+				}]
 		}
 	]
 }
