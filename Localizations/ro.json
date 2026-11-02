@@ -235,5 +235,8 @@
     "not_available_in_the_free_edition": "Nu este disponibil în ediția gratuită.",
     "open_api_json": "OpenAPI JSON",
     "asset_tab_video": "Video",
-    "asset_tab_model": "Model"
+    "asset_tab_model": "Model",
+    "export_texture_placeholders": "Exportați substituenți de textură",
+    "fail_on_missing_references": "Eșuați la referințe lipsă",
+    "preserve_sprite_atlases": "Păstrați atlasele Sprite"
 }

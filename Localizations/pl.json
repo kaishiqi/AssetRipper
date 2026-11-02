@@ -276,5 +276,8 @@
     "previous": "Poprzednia",
     "results": "Wyniki",
     "search": "Szukaj",
-    "search_placeholder": "Wprowadź nazwę zasobu lub klasy..."
+    "search_placeholder": "Wprowadź nazwę zasobu lub klasy...",
+    "export_texture_placeholders": "Eksportuj obiekty zastępcze tekstur",
+    "fail_on_missing_references": "Błąd przy brakujących odwołaniach",
+    "preserve_sprite_atlases": "Zachowaj atlasy sprite'ów"
 }

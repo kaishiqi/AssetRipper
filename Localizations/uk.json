@@ -250,5 +250,8 @@
     "scripts_use_fully_qualified_type_names": "Скрипти використовують повні імена типів",
     "select_files": "Вибрати файли",
     "select_folders": "Вибрати папки",
-    "file_id": "ID файлу"
+    "file_id": "ID файлу",
+    "export_texture_placeholders": "Експортувати заглушки текстур",
+    "fail_on_missing_references": "Помилка за відсутності посилань",
+    "preserve_sprite_atlases": "Зберігати SpriteAtlas"
 }

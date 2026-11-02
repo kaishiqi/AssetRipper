@@ -155,5 +155,8 @@
     "asset_tab_video": "影檔",
     "asset_tab_information": "資訊",
     "asset_tab_model": "模型",
-    "all": "全部"
+    "all": "全部",
+    "export_texture_placeholders": "匯出紋理佔位圖",
+    "fail_on_missing_references": "缺少參照時失敗",
+    "preserve_sprite_atlases": "保留 SpriteAtlas（不拆包）"
 }
