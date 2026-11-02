@@ -60,6 +60,29 @@ internal class TexturePlaceholderTests
 		}
 	}
 
+	[Test]
+	public void RenamedTextureIsReported()
+	{
+		VirtualFileSystem fileSystem = new();
+		ProcessedAssetCollection collection = AssetCreator.CreateCollection(UnityVersion.V_2022);
+		ITexture2D first = collection.CreateTexture2D();
+		first.Name = "icon";
+		ITexture2D second = collection.CreateTexture2D();
+		second.Name = "icon";
+		new SpriteProcessor().Process(CreateGameData(collection));
+
+		Export(fileSystem, collection);
+
+		string report = fileSystem.File.ReadAllText("/output/AuxiliaryFiles/renamed-textures.json");
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Texture2D/icon.png"), Is.True);
+			Assert.That(fileSystem.File.Exists("/output/ExportedProject/Assets/Texture2D/icon_0.png"), Is.True);
+			Assert.That(report, Does.Contain("\"OriginalFileName\": \"icon.png\""));
+			Assert.That(report, Does.Contain("\"ExportedFileName\": \"icon_0.png\""));
+		}
+	}
+
 	private static void Export(VirtualFileSystem fileSystem, ProcessedAssetCollection collection, Action<FullConfiguration>? configure = null)
 	{
 		FullConfiguration settings = new();

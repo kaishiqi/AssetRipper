@@ -1,6 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.SourceGenerated.Classes.ClassID_1034;
+using AssetRipper.SourceGenerated.Classes.ClassID_28;
 
 namespace AssetRipper.Export.UnityProjects;
 
@@ -15,7 +16,12 @@ public class AssetExportCollection<T> : ExportCollection where T : IUnityObjectB
 	public override bool Export(IExportContainer container, string projectDirectory, FileSystem fileSystem)
 	{
 		string subPath = fileSystem.Path.Join(projectDirectory, FileSystem.FixInvalidPathCharacters(Asset.GetBestDirectory()));
-		string fileName = GetUniqueFileName(Asset, subPath, fileSystem);
+		string fileName = GetUniqueFileName(Asset, subPath, fileSystem, out string originalFileName);
+		if (!string.Equals(fileName, originalFileName, StringComparison.Ordinal) && Asset is ITexture2D)
+		{
+			// Plain text assets such as Spine .atlas files still refer to the old name.
+			(container as ProjectAssetContainer)?.RecordRename(Asset, subPath, originalFileName, fileName);
+		}
 
 		fileSystem.Directory.Create(subPath);
 

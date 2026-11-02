@@ -70,6 +70,17 @@ public abstract class ExportCollection : IExportCollection
 
 	protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath, FileSystem fileSystem)
 	{
+		return GetUniqueFileName(asset, dirPath, fileSystem, out _);
+	}
+
+	protected string GetUniqueFileName(IUnityObjectBase asset, string dirPath, FileSystem fileSystem, out string originalFileName)
+	{
+		originalFileName = GetAssetFileName(asset);
+		return GetUniqueFileName(dirPath, originalFileName, fileSystem);
+	}
+
+	private string GetAssetFileName(IUnityObjectBase asset)
+	{
 		string fileName = asset.GetBestName();
 		fileName = FileSystem.RemoveCloneSuffixes(fileName);
 		fileName = FileSystem.RemoveInstanceSuffixes(fileName);
@@ -83,8 +94,7 @@ public abstract class ExportCollection : IExportCollection
 			fileName = FileSystem.FixInvalidFileNameCharacters(fileName);
 		}
 
-		fileName = $"{fileName}.{GetExportExtension(asset)}";
-		return GetUniqueFileName(dirPath, fileName, fileSystem);
+		return $"{fileName}.{GetExportExtension(asset)}";
 	}
 
 	protected static string GetUniqueFileName(string directoryPath, string fileName, FileSystem fileSystem)

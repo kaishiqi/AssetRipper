@@ -2,6 +2,7 @@
 using AssetRipper.Export.Configuration;
 using AssetRipper.Export.UnityProjects.Addressables;
 using AssetRipper.Export.UnityProjects.Audio;
+using AssetRipper.Export.UnityProjects.Diagnostics;
 using AssetRipper.Export.UnityProjects.MissingReferences;
 using AssetRipper.Export.UnityProjects.PathIdMapping;
 using AssetRipper.Export.UnityProjects.Project;
@@ -116,6 +117,7 @@ public class ExportHandler
 		projectExporter.Export(gameData.GameBundle, Settings, fileSystem);
 		PathCasingRestorer.Restore(Settings, fileSystem);
 		GuidReconciler.Reconcile(Settings, fileSystem);
+		TextReferenceRepairer.Repair(Settings, fileSystem, projectExporter.Renames.Items);
 		MissingReferencesPostExporter.Write(Settings, fileSystem, projectExporter.MissingReferences);
 
 		Logger.Info(LogCategory.Export, "Finished exporting assets");

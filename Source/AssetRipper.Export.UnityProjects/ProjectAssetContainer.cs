@@ -1,6 +1,7 @@
 using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Export.UnityProjects.DeletedAssets;
+using AssetRipper.Export.UnityProjects.Diagnostics;
 using AssetRipper.Export.UnityProjects.MissingReferences;
 using AssetRipper.Export.UnityProjects.Project;
 using AssetRipper.Import.Configuration;
@@ -14,10 +15,11 @@ namespace AssetRipper.Export.UnityProjects;
 public class ProjectAssetContainer : IExportContainer
 {
 	public ProjectAssetContainer(ProjectExporter exporter, CoreConfiguration options, IEnumerable<IUnityObjectBase> assets,
-		IReadOnlyList<IExportCollection> collections, MissingReferenceCollector missingReferences)
+		IReadOnlyList<IExportCollection> collections, MissingReferenceCollector missingReferences, AssetRenameCollector renames)
 	{
 		m_exporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
 		MissingReferences = missingReferences ?? throw new ArgumentNullException(nameof(missingReferences));
+		Renames = renames ?? throw new ArgumentNullException(nameof(renames));
 		CurrentCollection = null!;
 
 		ExportVersion = options.Version;
@@ -113,6 +115,23 @@ public class ProjectAssetContainer : IExportContainer
 	public AssetCollection File => CurrentCollection.File;
 	public UnityVersion ExportVersion { get; }
 	public MissingReferenceCollector MissingReferences { get; }
+	public AssetRenameCollector Renames { get; }
+
+	/// <summary>
+	/// Record a texture whose exported file name had to be made unique.
+	/// </summary>
+	internal void RecordRename(IUnityObjectBase asset, string directoryPath, string originalFileName, string exportedFileName)
+	{
+		Renames.Add(new AssetRenameInfo
+		{
+			AssetName = asset.GetBestName(),
+			ClassID = asset.ClassID,
+			OriginalFileName = originalFileName,
+			ExportedFileName = exportedFileName,
+			Directory = directoryPath,
+			SourceFile = asset.Collection.Name,
+		});
+	}
 
 	private readonly ProjectExporter m_exporter;
 	private readonly Dictionary<IUnityObjectBase, IExportCollection> m_assetCollections = new();

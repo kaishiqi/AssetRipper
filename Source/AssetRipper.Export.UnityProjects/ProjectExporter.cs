@@ -1,5 +1,6 @@
 ﻿using AssetRipper.Assets;
 using AssetRipper.Assets.Bundles;
+using AssetRipper.Export.UnityProjects.Diagnostics;
 using AssetRipper.Export.UnityProjects.MissingReferences;
 using AssetRipper.Import.Configuration;
 using AssetRipper.Import.Logging;
@@ -18,6 +19,8 @@ public sealed partial class ProjectExporter
 	private readonly ObjectHandlerStack<IAssetExporter> assetExporterStack = new();
 
 	public MissingReferenceCollector MissingReferences { get; } = new();
+
+	public AssetRenameCollector Renames { get; } = new();
 
 	/// <summary>Adds an exporter to the stack of exporters for this asset type.</summary>
 	/// <typeparam name="T">The c sharp type of this asset type. Any inherited types also get this exporter.</typeparam>
@@ -78,12 +81,13 @@ public sealed partial class ProjectExporter
 	public void Export(GameBundle fileCollection, CoreConfiguration options, FileSystem fileSystem)
 	{
 		MissingReferences.Clear();
+		Renames.Clear();
 		EventExportPreparationStarted?.Invoke();
 		List<IExportCollection> collections = CreateCollections(fileCollection);
 		EventExportPreparationFinished?.Invoke();
 
 		EventExportStarted?.Invoke();
-		ProjectAssetContainer container = new ProjectAssetContainer(this, options, fileCollection.FetchAssets(), collections, MissingReferences);
+		ProjectAssetContainer container = new ProjectAssetContainer(this, options, fileCollection.FetchAssets(), collections, MissingReferences, Renames);
 		int exportableCount = collections.Count(c => c.Exportable);
 		int currentExportable = 0;
 
