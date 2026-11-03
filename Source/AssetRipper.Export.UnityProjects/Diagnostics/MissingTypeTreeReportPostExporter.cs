@@ -2,12 +2,9 @@ using AssetRipper.Assets;
 using AssetRipper.Assets.Collections;
 using AssetRipper.Export.Configuration;
 using AssetRipper.Import.Logging;
-using AssetRipper.Import.Structure.Assembly;
 using AssetRipper.Import.Structure.Assembly.Serializable;
 using AssetRipper.Processing;
 using AssetRipper.SourceGenerated.Classes.ClassID_114;
-using AssetRipper.SourceGenerated.Classes.ClassID_115;
-using AssetRipper.SourceGenerated.Extensions;
 using System.Text.Json;
 
 namespace AssetRipper.Export.UnityProjects.Diagnostics;
@@ -53,7 +50,7 @@ public sealed class MissingTypeTreeReportPostExporter : IPostExporter
 				foreach (IMonoBehaviour monoBehaviour in monoBehaviours)
 				{
 					report.TypelessMonoBehaviourCount++;
-					string script = GetScriptName(monoBehaviour) ?? "(unknown)";
+					string script = MonoBehaviourScriptHelper.GetScriptName(monoBehaviour) ?? "(unknown)";
 					scriptCounts[script] = scriptCounts.TryGetValue(script, out int count) ? count + 1 : 1;
 
 					if (monoBehaviour.Structure is null)
@@ -98,7 +95,7 @@ public sealed class MissingTypeTreeReportPostExporter : IPostExporter
 
 	private static MonoBehaviourSample CreateSample(IMonoBehaviour monoBehaviour)
 	{
-		(string? script, string? assembly) = GetScript(monoBehaviour);
+		(string? script, string? assembly) = MonoBehaviourScriptHelper.GetScript(monoBehaviour);
 		return new MonoBehaviourSample
 		{
 			Name = monoBehaviour.GetBestName(),
@@ -114,34 +111,6 @@ public sealed class MissingTypeTreeReportPostExporter : IPostExporter
 			},
 			FieldCount = monoBehaviour.Structure is SerializableStructure structure ? structure.Type.Fields.Count : 0,
 		};
-	}
-
-	private static string? GetScriptName(IMonoBehaviour monoBehaviour)
-	{
-		return GetScript(monoBehaviour).Name;
-	}
-
-	private static (string? Name, string? Assembly) GetScript(IMonoBehaviour monoBehaviour)
-	{
-		var scriptPointer = monoBehaviour.Script;
-		if (!monoBehaviour.Collection.TryGetAsset(scriptPointer.FileID, scriptPointer.PathID, out IUnityObjectBase? asset)
-			|| asset is not IMonoScript script)
-		{
-			return (null, null);
-		}
-
-		string name = script.Namespace.String;
-		string className = script.ClassName_R.String;
-		if (name.Length == 0)
-		{
-			name = className;
-		}
-		else
-		{
-			name = $"{name}.{className}";
-		}
-
-		return (name, script.GetAssemblyNameFixed());
 	}
 
 	private static void Write(FullConfiguration settings, FileSystem fileSystem, MissingTypeTreeReport report)
