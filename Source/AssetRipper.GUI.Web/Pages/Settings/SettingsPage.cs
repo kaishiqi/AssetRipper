@@ -198,6 +198,14 @@ public sealed partial class SettingsPage : DefaultPage
 							{
 								using (new Div(writer).WithClass("col").End())
 								{
+									WriteCheckBoxForRepairTextReferences(writer, Localization.RepairTextReferences);
+								}
+							}
+
+							using (new Div(writer).WithClass("row").End())
+							{
+								using (new Div(writer).WithClass("col").End())
+								{
 								}
 								using (new Div(writer).WithClass("col").End())
 								{

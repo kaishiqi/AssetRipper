@@ -238,5 +238,6 @@
     "asset_tab_model": "Model",
     "export_texture_placeholders": "Exportați substituenți de textură",
     "fail_on_missing_references": "Eșuați la referințe lipsă",
-    "preserve_sprite_atlases": "Păstrați atlasele Sprite"
+    "preserve_sprite_atlases": "Păstrați atlasele Sprite",
+    "repair_text_references": "Reparați referințele text către texturile redenumite"
 }

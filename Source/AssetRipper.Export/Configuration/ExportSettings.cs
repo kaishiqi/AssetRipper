@@ -83,6 +83,12 @@ public sealed record class ExportSettings
 	/// </summary>
 	public bool PreserveSpriteAtlases { get; set; } = false;
 
+	/// <summary>
+	/// If true, plain text assets that reference a renamed texture by name are updated after
+	/// export. Currently this covers Spine <c>.atlas</c> page names.
+	/// </summary>
+	public bool RepairTextReferences { get; set; } = true;
+
 	public void Log()
 	{
 		Logger.Info(LogCategory.General, $"{nameof(AudioExportFormat)}: {AudioExportFormat}");
@@ -99,5 +105,6 @@ public sealed record class ExportSettings
 		Logger.Info(LogCategory.General, $"{nameof(FailOnMissingReferences)}: {FailOnMissingReferences}");
 		Logger.Info(LogCategory.General, $"{nameof(ExportTexturePlaceholders)}: {ExportTexturePlaceholders}");
 		Logger.Info(LogCategory.General, $"{nameof(PreserveSpriteAtlases)}: {PreserveSpriteAtlases}");
+		Logger.Info(LogCategory.General, $"{nameof(RepairTextReferences)}: {RepairTextReferences}");
 	}
 }

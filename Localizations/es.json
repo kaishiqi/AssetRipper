@@ -247,5 +247,6 @@
     "create_subfolder": "Crear subcarpeta",
     "scripts_use_fully_qualified_type_names": "Los scripts usan un tipo de nombre enteramente cualificado",
     "select_files": "Seleccionar archivos",
-    "select_folders": "Seleccionar carpetas"
+    "select_folders": "Seleccionar carpetas",
+    "repair_text_references": "Reparar referencias de texto a texturas renombradas"
 }

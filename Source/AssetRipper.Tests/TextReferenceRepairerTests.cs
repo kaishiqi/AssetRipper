@@ -146,6 +146,36 @@ internal class TextReferenceRepairerTests
 		}
 	}
 
+	[Test]
+	public void RepairCanBeDisabled()
+	{
+		VirtualFileSystem fileSystem = new();
+		fileSystem.Directory.Create(SpineDirectory);
+		fileSystem.File.WriteAllText(AtlasPath, "rukou.png\nsize: 1024,1024\n");
+		fileSystem.File.WriteAllText(SpineDirectory + "/rukou_0.png", "image");
+
+		AssetRenameInfo rename = new()
+		{
+			AssetName = "rukou",
+			ClassID = 28,
+			OriginalFileName = "rukou.png",
+			ExportedFileName = "rukou_0.png",
+			Directory = SpineDirectory,
+		};
+
+		FullConfiguration settings = CreateSettings();
+		settings.ExportSettings.RepairTextReferences = false;
+		TextReferenceRepairer.Repair(settings, fileSystem, [rename]);
+
+		string json = fileSystem.File.ReadAllText(ReportPath);
+		using (Assert.EnterMultipleScope())
+		{
+			Assert.That(fileSystem.File.ReadAllText(AtlasPath), Does.StartWith("rukou.png"));
+			Assert.That(json, Does.Contain("\"TotalRenameCount\": 1"));
+			Assert.That(json, Does.Contain("\"Repairs\": []"));
+		}
+	}
+
 	private static FullConfiguration CreateSettings()
 	{
 		FullConfiguration settings = new();

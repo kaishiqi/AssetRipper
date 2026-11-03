@@ -240,5 +240,6 @@
     "there_are_no_keys_for_this_data_type": "Il n'y a pas de clés pour ce type de données.",
     "transform": "Transformer",
     "vertex_count": "Nombre de sommets",
-    "warning_this_directory_is_not_empty_all_content_will_be_deleted": "Attention : ce répertoire n'est pas vide. Tout le contenu sera supprimé."
+    "warning_this_directory_is_not_empty_all_content_will_be_deleted": "Attention : ce répertoire n'est pas vide. Tout le contenu sera supprimé.",
+    "repair_text_references": "Réparer les références texte des textures renommées"
 }

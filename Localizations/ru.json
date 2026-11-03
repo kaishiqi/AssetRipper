@@ -212,5 +212,6 @@
     "asset_tab_video": "Видео",
     "export_texture_placeholders": "Экспортировать заглушки текстур",
     "fail_on_missing_references": "Ошибка при отсутствующих ссылках",
-    "preserve_sprite_atlases": "Сохранять SpriteAtlas"
+    "preserve_sprite_atlases": "Сохранять SpriteAtlas",
+    "repair_text_references": "Исправлять текстовые ссылки на переименованные текстуры"
 }

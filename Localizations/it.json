@@ -99,5 +99,6 @@
     "welcome_title": "Benvenuto in AssetRipper",
     "export_texture_placeholders": "Esporta segnaposto texture",
     "fail_on_missing_references": "Non riuscire se mancano riferimenti",
-    "preserve_sprite_atlases": "Mantieni atlanti sprite"
+    "preserve_sprite_atlases": "Mantieni atlanti sprite",
+    "repair_text_references": "Ripara i riferimenti testuali alle texture rinominate"
 }

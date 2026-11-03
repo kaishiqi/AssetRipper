@@ -133,5 +133,6 @@
     "loading_step_restore_attributes": "생성된 어셈블리 속성 복원",
     "export_texture_placeholders": "텍스처 자리 표시자 내보내기",
     "fail_on_missing_references": "누락된 참조가 있으면 실패",
-    "preserve_sprite_atlases": "SpriteAtlas 유지(풀지 않음)"
+    "preserve_sprite_atlases": "SpriteAtlas 유지(풀지 않음)",
+    "repair_text_references": "이름이 변경된 텍스처의 텍스트 참조 복구"
 }

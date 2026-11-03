@@ -71,5 +71,6 @@
     "welcome_title": "Welkom bij AssetRipper",
     "export_texture_placeholders": "Textuurplaatsaanduidingen exporteren",
     "fail_on_missing_references": "Mislukken bij ontbrekende verwijzingen",
-    "preserve_sprite_atlases": "Sprite-atlassen behouden"
+    "preserve_sprite_atlases": "Sprite-atlassen behouden",
+    "repair_text_references": "Tekstverwijzingen naar hernoemde texturen herstellen"
 }
