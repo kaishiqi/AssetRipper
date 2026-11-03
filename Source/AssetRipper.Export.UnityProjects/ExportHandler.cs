@@ -159,7 +159,6 @@ public class ExportHandler
 		yield return new StreamingAssetsPostExporter();
 		yield return new AddressablesPostExporter(inputPaths, inputFileSystem);
 		yield return new AssetReferenceReportPostExporter();
-		yield return new DataConfigReportPostExporter();
 		yield return new MissingTypeTreeReportPostExporter();
 		yield return new TypeTreeConfidenceReportPostExporter();
 		yield return new DllPostExporter();

@@ -72,5 +72,6 @@
     "experimental": "تجربی",
     "export_complete": "صدور کامل شد!",
     "export_preparing": "آماده‌سازی برای صدور...\nاین فرآیند ممکن است کمی طول بکشد.",
-    "audio_format_yaml": "یامل"
+    "audio_format_yaml": "یامل",
+    "repair_text_references": "اصلاح ارجاعات متنی به بافت‌های تغییرنام‌یافته"
 }

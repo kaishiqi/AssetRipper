@@ -78,6 +78,7 @@ partial class SettingsPage
 		{ nameof(ExportSettings.FailOnMissingReferences), (value) => { Configuration.ExportSettings.FailOnMissingReferences = value; } },
 		{ nameof(ExportSettings.ExportTexturePlaceholders), (value) => { Configuration.ExportSettings.ExportTexturePlaceholders = value; } },
 		{ nameof(ExportSettings.PreserveSpriteAtlases), (value) => { Configuration.ExportSettings.PreserveSpriteAtlases = value; } },
+		{ nameof(ExportSettings.RepairTextReferences), (value) => { Configuration.ExportSettings.RepairTextReferences = value; } },
 	};
 
 	private static void WriteDropDownForScriptContentLevel(TextWriter writer)
@@ -198,5 +199,10 @@ partial class SettingsPage
 	private static void WriteCheckBoxForPreserveSpriteAtlases(TextWriter writer, string label, bool disabled = false)
 	{
 		WriteCheckBox(writer, label, Configuration.ExportSettings.PreserveSpriteAtlases, nameof(ExportSettings.PreserveSpriteAtlases), disabled);
+	}
+
+	private static void WriteCheckBoxForRepairTextReferences(TextWriter writer, string label, bool disabled = false)
+	{
+		WriteCheckBox(writer, label, Configuration.ExportSettings.RepairTextReferences, nameof(ExportSettings.RepairTextReferences), disabled);
 	}
 }

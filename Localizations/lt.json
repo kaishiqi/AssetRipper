@@ -275,5 +275,6 @@
     "yaml": "Yaml",
     "export_texture_placeholders": "Eksportuoti tekstūros pakaitus",
     "fail_on_missing_references": "Nepavykus rasti nuorodų",
-    "preserve_sprite_atlases": "Išsaugoti Sprite Atlas"
+    "preserve_sprite_atlases": "Išsaugoti Sprite Atlas",
+    "repair_text_references": "Taisyti teksto nuorodas į pervadintas tekstūras"
 }

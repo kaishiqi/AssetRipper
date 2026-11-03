@@ -270,5 +270,6 @@
     "select_folders": "フォルダーを選択",
     "export_texture_placeholders": "テクスチャのプレースホルダーをエクスポート",
     "fail_on_missing_references": "参照が見つからない場合は失敗",
-    "preserve_sprite_atlases": "SpriteAtlas を保持（展開しない）"
+    "preserve_sprite_atlases": "SpriteAtlas を保持（展開しない）",
+    "repair_text_references": "名前変更したテクスチャへのテキスト参照を修復"
 }

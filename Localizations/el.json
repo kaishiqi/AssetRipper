@@ -138,5 +138,6 @@
     "game_object": "Αντικείμενο Παιχνιδιού (GameObject)",
     "namespace": "Namespace",
     "export_unity_project": "Εξαγωγή Unity Project",
-    "export_primary_content": "Εξαγωγή Πρωτεύοντος Περιεχομένου"
+    "export_primary_content": "Εξαγωγή Πρωτεύοντος Περιεχομένου",
+    "repair_text_references": "Διόρθωση αναφορών κειμένου σε μετονομασμένες υφές"
 }

@@ -253,5 +253,6 @@
     "file_id": "ID файлу",
     "export_texture_placeholders": "Експортувати заглушки текстур",
     "fail_on_missing_references": "Помилка за відсутності посилань",
-    "preserve_sprite_atlases": "Зберігати SpriteAtlas"
+    "preserve_sprite_atlases": "Зберігати SpriteAtlas",
+    "repair_text_references": "Виправляти текстові посилання на перейменовані текстури"
 }

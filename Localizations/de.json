@@ -158,5 +158,6 @@
     "assembly_name": "Assembly Name",
     "asset_bundle_name": "Asset Bundle Name",
     "asset_tab_development": "Entwicklung",
-    "asset_tab_information": "Informationen"
+    "asset_tab_information": "Informationen",
+    "repair_text_references": "Textreferenzen auf umbenannte Texturen reparieren"
 }

@@ -158,5 +158,6 @@
     "all": "全部",
     "export_texture_placeholders": "匯出紋理佔位圖",
     "fail_on_missing_references": "缺少參照時失敗",
-    "preserve_sprite_atlases": "保留 SpriteAtlas（不拆包）"
+    "preserve_sprite_atlases": "保留 SpriteAtlas（不拆包）",
+    "repair_text_references": "修復重新命名紋理的文字參照"
 }

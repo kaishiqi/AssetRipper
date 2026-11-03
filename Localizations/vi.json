@@ -273,5 +273,6 @@
     "yaml": "Yaml",
     "export_texture_placeholders": "Xuất ảnh giữ chỗ kết cấu",
     "fail_on_missing_references": "Thất bại khi thiếu tham chiếu",
-    "preserve_sprite_atlases": "Giữ nguyên Sprite Atlas"
+    "preserve_sprite_atlases": "Giữ nguyên Sprite Atlas",
+    "repair_text_references": "Sửa tham chiếu văn bản đến kết cấu đã đổi tên"
 }

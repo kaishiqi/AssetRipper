@@ -44,7 +44,7 @@ public static class TextReferenceRepairer
 		}
 
 		string assetsPath = settings.AssetsPath;
-		if (renames.Count > 0 && fileSystem.Directory.Exists(assetsPath))
+		if (renames.Count > 0 && settings.ExportSettings.RepairTextReferences && fileSystem.Directory.Exists(assetsPath))
 		{
 			Dictionary<string, List<AssetRenameInfo>> byStem = BuildLookup(fileSystem, renames);
 			HashSet<string> exportedFileNames = EnumerateExportedFileNames(fileSystem, assetsPath);

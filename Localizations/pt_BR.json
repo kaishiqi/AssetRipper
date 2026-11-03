@@ -253,5 +253,6 @@
     "export_unity_project": "Exportar Projeto Unity",
     "export_texture_placeholders": "Exportar marcadores de textura",
     "fail_on_missing_references": "Falhar se houver referências ausentes",
-    "preserve_sprite_atlases": "Preservar atlas de sprites"
+    "preserve_sprite_atlases": "Preservar atlas de sprites",
+    "repair_text_references": "Reparar referências de texto para texturas renomeadas"
 }
