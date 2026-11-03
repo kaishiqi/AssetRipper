@@ -250,5 +250,8 @@
     "there_are_no_keys_for_this_data_type": "Não há chaves para esse tipo de dados.",
     "warning_this_directory_is_not_empty_all_content_will_be_deleted": "Atenção: este diretório não está vazio. Todo o conteúdo será excluído.",
     "export_primary_content": "Exportar Conteúdo Principal",
-    "export_unity_project": "Exportar Projeto Unity"
+    "export_unity_project": "Exportar Projeto Unity",
+    "export_texture_placeholders": "Exportar marcadores de textura",
+    "fail_on_missing_references": "Falhar se houver referências ausentes",
+    "preserve_sprite_atlases": "Preservar atlas de sprites"
 }

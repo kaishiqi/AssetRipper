@@ -1,6 +1,9 @@
 {
     "reference_project_path": "Carpeta de referencia (opcional)",
     "reference_project_path_hint": "Los recursos con la misma ruta que en la carpeta de referencia reutilizan el GUID de su .meta. Déjalo vacío para generar GUID nuevos.",
+    "export_texture_placeholders": "Exportar marcadores de textura",
+    "fail_on_missing_references": "Fallar si faltan referencias",
+    "preserve_sprite_atlases": "Conservar atlas de sprites",
     "an_error_occured_during_decompilation": "Ha ocurrido un error durante la descompilación.",
     "appreciation_message": "¡Gracias por apoyar AssetRipper!",
     "assembly_name": "Nombre del ensamblado",

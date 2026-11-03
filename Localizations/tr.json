@@ -154,5 +154,8 @@
     "asset_tab_font": "Yazı Tipi",
     "asset_tab_hex": "Hex",
     "asset_tab_model": "Model",
-    "all": "Hepsi"
+    "all": "Hepsi",
+    "export_texture_placeholders": "Doku yer tutucularını dışa aktar",
+    "fail_on_missing_references": "Eksik başvurularda başarısız ol",
+    "preserve_sprite_atlases": "Sprite Atlas'ları koru"
 }

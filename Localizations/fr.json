@@ -1,6 +1,9 @@
 {
     "reference_project_path": "Dossier de référence (facultatif)",
     "reference_project_path_hint": "Les assets dont le chemin est identique à celui du dossier de référence réutilisent le GUID de son .meta. Laissez vide pour générer de nouveaux GUID.",
+    "export_texture_placeholders": "Exporter les images de remplacement",
+    "fail_on_missing_references": "Échouer en cas de références manquantes",
+    "preserve_sprite_atlases": "Conserver les atlas de sprites",
     "asset_tab_audio": "Audio",
     "asset_tab_audio_duration_unknown": "<Inconnu>",
     "asset_tab_audio_pause": "Pause",

@@ -267,5 +267,8 @@
     "script_export_format_hybrid_description": "アセンブリ C# のような特殊なアセンブリはデコンパイルされます。その他のアセンブリはコンパイルされた DLL 形式でエクスポートされます。",
     "scripts_use_fully_qualified_type_names": "スクリプトで完全修飾名を使用する",
     "select_files": "ファイルを選択",
-    "select_folders": "フォルダーを選択"
+    "select_folders": "フォルダーを選択",
+    "export_texture_placeholders": "テクスチャのプレースホルダーをエクスポート",
+    "fail_on_missing_references": "参照が見つからない場合は失敗",
+    "preserve_sprite_atlases": "SpriteAtlas を保持（展開しない）"
 }

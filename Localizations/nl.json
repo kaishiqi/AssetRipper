@@ -68,5 +68,8 @@
     "audio_format_yaml": "YAML",
     "audio_format_yaml_description": "Exporteer als een YAML asset en resS bestand. Dit is een veilige optie en een back-up als er iets misgaat.",
     "bundled_assets_export_direct_export": "Directe Export",
-    "welcome_title": "Welkom bij AssetRipper"
+    "welcome_title": "Welkom bij AssetRipper",
+    "export_texture_placeholders": "Textuurplaatsaanduidingen exporteren",
+    "fail_on_missing_references": "Mislukken bij ontbrekende verwijzingen",
+    "preserve_sprite_atlases": "Sprite-atlassen behouden"
 }

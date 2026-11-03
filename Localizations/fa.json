@@ -1,6 +1,9 @@
 {
     "reference_project_path": "پوشه مرجع (اختیاری)",
     "reference_project_path_hint": "دارایی‌هایی که مسیرشان با پوشه مرجع یکسان است، از GUID موجود در فایل .meta آن استفاده می‌کنند. برای ایجاد GUIDهای جدید خالی بگذارید.",
+    "export_texture_placeholders": "خروجی گرفتن از جای‌نگهدارهای بافت",
+    "fail_on_missing_references": "خطا در صورت وجود ارجاعات گمشده",
+    "preserve_sprite_atlases": "حفظ اطلس‌های اسپرایت",
     "an_error_occured_during_decompilation": "خطایی در حین دیکامپایل رخ داد.",
     "appreciation_message": "با تشکر از شما برای حمایت از اسِت ریپِر!",
     "assembly_name": "نام مجمع",

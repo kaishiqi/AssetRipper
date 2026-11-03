@@ -130,5 +130,8 @@
     "asset_tab_audio_pause": "일시 정지",
     "asset_tab_audio": "오디오",
     "audio_format_default_description": "FSB 내에 포함된 콘텐츠 유형으로 에셋을 추출합니다. 대부분 오디오들은 WAV 형식으로 추출되고 일부는 OGG로 내보내집니다.",
-    "loading_step_restore_attributes": "생성된 어셈블리 속성 복원"
+    "loading_step_restore_attributes": "생성된 어셈블리 속성 복원",
+    "export_texture_placeholders": "텍스처 자리 표시자 내보내기",
+    "fail_on_missing_references": "누락된 참조가 있으면 실패",
+    "preserve_sprite_atlases": "SpriteAtlas 유지(풀지 않음)"
 }

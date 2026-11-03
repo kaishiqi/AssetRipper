@@ -209,5 +209,8 @@
     "bundles": "Пакеты",
     "class_name": "Имя Класса",
     "data": "Данные",
-    "asset_tab_video": "Видео"
+    "asset_tab_video": "Видео",
+    "export_texture_placeholders": "Экспортировать заглушки текстур",
+    "fail_on_missing_references": "Ошибка при отсутствующих ссылках",
+    "preserve_sprite_atlases": "Сохранять SpriteAtlas"
 }

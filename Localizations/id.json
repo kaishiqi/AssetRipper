@@ -1,4 +1,7 @@
 {
     "reference_project_path": "Folder Referensi (opsional)",
-    "reference_project_path_hint": "Aset dengan jalur yang sama seperti di folder referensi akan menggunakan kembali GUID dari .meta-nya. Biarkan kosong untuk membuat GUID baru."
+    "reference_project_path_hint": "Aset dengan jalur yang sama seperti di folder referensi akan menggunakan kembali GUID dari .meta-nya. Biarkan kosong untuk membuat GUID baru.",
+    "export_texture_placeholders": "Ekspor Placeholder Tekstur",
+    "fail_on_missing_references": "Gagal Jika Referensi Hilang",
+    "preserve_sprite_atlases": "Pertahankan Sprite Atlas"
 }
